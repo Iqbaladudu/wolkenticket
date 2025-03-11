@@ -9,9 +9,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, Plane, MapPin, Search, Cloud } from "lucide-react";
+import { CalendarIcon, Cloud, MapPin, Plane, Search } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import ComboBoxResponsive from "@/components/autocomplete-dropdown";
 
 export default function Hero() {
   const [date, setDate] = useState<Date>();
@@ -49,9 +50,12 @@ export default function Hero() {
             </div>
 
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              <span className="block text-white drop-shadow-2xl">Get Confirmed Flight Reservation</span>
               <span className="block text-white drop-shadow-2xl">
-                in Minutes! <span className="animate-wave inline-block">✈️</span>
+                Get Confirmed Flight Reservation
+              </span>
+              <span className="block text-white drop-shadow-2xl">
+                in Minutes!{" "}
+                <span className="animate-wave inline-block">✈️</span>
               </span>
             </h1>
 
@@ -68,10 +72,7 @@ export default function Hero() {
                     <MapPin className="h-4 w-4 mr-1 text-primary" />
                     From
                   </label>
-                  <Input
-                    placeholder="Departure city"
-                    className="rounded-xl border-primary/20 focus:border-primary focus:ring-primary"
-                  />
+                  <ComboBoxResponsive />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium flex items-center">
@@ -97,7 +98,7 @@ export default function Hero() {
                         variant={"outline"}
                         className={cn(
                           "w-full justify-start text-left font-normal rounded-xl border-primary/20",
-                          !date && "text-muted-foreground"
+                          !date && "text-muted-foreground",
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -125,7 +126,7 @@ export default function Hero() {
                         variant={"outline"}
                         className={cn(
                           "w-full justify-start text-left font-normal rounded-xl border-primary/20",
-                          !date && "text-muted-foreground"
+                          !date && "text-muted-foreground",
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
