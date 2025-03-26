@@ -367,7 +367,7 @@ export default function MultiStepBookingForm() {
       },
       departureDate: "",
       returnDate: "",
-      passengers: [{ name: "", email: "", phone: "" }], // Start with one passenger
+      passengers: [{ name: "", birthDate: "" }], // Start with one passenger
       paymentMethod: "",
     },
   });
