@@ -64,7 +64,7 @@ export default function Testimonials() {
                 <CardContent className="flex flex-col gap-4">
                   <QuoteIcon className="h-8 w-8 text-white/80" />
                   <p className="text-lg italic text-white/90">
-                    "{testimonial.quote}"
+                    &quot;{testimonial.quote}&quot;
                   </p>
                   <div>
                     <p className="font-semibold text-white">

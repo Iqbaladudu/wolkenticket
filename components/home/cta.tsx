@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Plane } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 // Real airline partners with logo URLs (replace with your own assets)
 const airlinePartners = [
@@ -96,7 +97,9 @@ export default function CallToActionWithPartners() {
                 }}
                 whileHover={{ y: -5 }}
               >
-                <img
+                <Image
+                  height={300}
+                  width={300}
                   src={partner.logo}
                   alt={`${partner.name} logo`}
                   className="h-12 w-auto mx-auto object-contain"

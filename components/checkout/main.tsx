@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AsyncSelect from "react-select/async";
@@ -29,7 +29,6 @@ import * as z from "zod";
 import { convertToSelectOptionsWithCountry } from "@/lib/utils";
 import Fuse from "fuse.js";
 import { debounce } from "lodash";
-import { fit } from "sharp";
 
 // Type definitions
 interface AirportOption {
@@ -93,17 +92,14 @@ function TravelDetails({
     () => new Fuse(airportsData || [], { keys: ["label", "value"] }),
     [airportsData],
   );
-  const loadAirports = useCallback(
-    debounce(
-      (inputValue: string, callback: (options: AirportOption[]) => void) => {
-        const results = inputValue
-          ? fuse.search(inputValue).map((r) => r.item)
-          : airportsData || [];
-        callback(results);
-      },
-      1000,
-    ),
-    [fuse, airportsData],
+  const loadAirports = debounce(
+    (inputValue: string, callback: (options: AirportOption[]) => void) => {
+      const results = inputValue
+        ? fuse.search(inputValue).map((r) => r.item)
+        : airportsData || [];
+      callback(results);
+    },
+    1000,
   );
 
   return (

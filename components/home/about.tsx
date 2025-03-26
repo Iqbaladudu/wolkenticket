@@ -2,6 +2,7 @@
 
 import { Plane } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 // Real airline partners with logo URLs (replace with your own assets)
 const airlinePartners = [
@@ -76,7 +77,9 @@ export default function AboutUs() {
               }}
               whileHover={{ scale: 1.05 }}
             >
-              <img
+              <Image
+                width={300}
+                height={300}
                 src={partner.logo}
                 alt={`${partner.name} logo`}
                 className="h-10 w-auto object-contain transition-transform duration-300"
