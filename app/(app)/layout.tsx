@@ -3,6 +3,8 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/QueryProvider";
 
+export const runtime = "edge";
+
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-geist-sans",
   subsets: ["latin"],
