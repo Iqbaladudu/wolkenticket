@@ -12,8 +12,8 @@ export default function Home() {
     <>
       <Navbar />
       <Hero />
-      <AboutUs />
       <Featured />
+      <AboutUs />
       <Testimonials />
       <BookingInstructions />
       <CallToActionWithPartners />
