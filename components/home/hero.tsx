@@ -3,6 +3,8 @@
 import React from "react";
 import { Cloud, Plane } from "lucide-react";
 import { motion } from "framer-motion";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -56,9 +58,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           >
-            Get a verified flight reservation
-            <br />
-            In minutes
+            Get Verified Flight Reservations In Minutes
+            <br />— Just $8
           </motion.h1>
 
           <motion.p
@@ -67,8 +68,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
           >
-            Dapatkan reservasi penerbangan terverifikasi dalam hitungan menit!
-            Proses cepat, mudah, dan terpercaya untuk perjalanan kamu.
+            Get Verified Flight Reservations In Minutes! Fast, Easy, Reliable &
+            Surprisingly Affordable Starting At Just $8
           </motion.p>
 
           <motion.div
@@ -77,9 +78,12 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-semibold shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              Booking sekarang
-            </button>
+            <Button
+              asChild
+              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-semibold shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            >
+              <Link href="/checkout">Book Now</Link>
+            </Button>
           </motion.div>
 
           {/* Stats with animations */}

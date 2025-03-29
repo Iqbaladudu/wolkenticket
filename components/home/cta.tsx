@@ -16,6 +16,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 // TypeScript interfaces
 interface AirlinePartner {
@@ -221,9 +222,8 @@ const CallToActionWithPartners: React.FC = () => {
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
                     transition={{ duration: 0.6, delay: 0.2 }}
                   >
-                    Ready to Fly with
+                    Get Your Travel Document Now — Only $8
                     <span className="relative">
-                      <span className="relative z-10"> WolkenTicket</span>
                       <motion.span
                         className="absolute bottom-1 left-0 right-0 h-2 md:h-3 bg-white/20 -z-0 rounded-sm"
                         initial={{ width: 0 }}
@@ -251,24 +251,9 @@ const CallToActionWithPartners: React.FC = () => {
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6, delay: 0.4 }}
                   >
-                    <Button
-                      size="lg"
-                      className="group bg-white text-blue-700 hover:bg-blue-50 rounded-full px-6 sm:px-8 py-4 sm:py-6 shadow-lg hover:shadow-xl transition-all duration-300 h-auto"
-                    >
-                      <span className="text-sm sm:text-base font-medium">
-                        Book Now
-                      </span>
+                    <Button className="group bg-white text-blue-700 hover:bg-blue-50 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 h-auto">
+                      <Link href="/checkout"> Book Now</Link>
                       <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                    </Button>
-
-                    <Button
-                      variant="ghost"
-                      size="lg"
-                      className="text-white border-2 border-white/30 hover:bg-white/10 rounded-full px-4 sm:px-6 py-4 sm:py-6 h-auto"
-                    >
-                      <span className="text-sm sm:text-base font-medium">
-                        Learn More
-                      </span>
                     </Button>
                   </motion.div>
                 </div>
@@ -438,23 +423,6 @@ const CallToActionWithPartners: React.FC = () => {
                     <p className="text-xs text-blue-600 font-medium">
                       {partner.routes}
                     </p>
-
-                    <AnimatePresence>
-                      {hoveredPartner === partner.name && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 5 }}
-                          transition={{ duration: 0.2 }}
-                          className="absolute -bottom-3 left-0 right-0 flex justify-center"
-                        >
-                          <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 border-none shadow-sm">
-                            <ExternalLink className="h-3 w-3 mr-1" />
-                            <span className="text-xs">View flights</span>
-                          </Badge>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </CardContent>
                 </Card>
               </motion.div>

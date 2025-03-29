@@ -28,30 +28,29 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 const steps = [
   {
     id: "search",
-    title: "Search Your Flight",
-    description:
-      "Enter your destination and travel dates to find the perfect flight.",
+    title: "Find Your Destination",
+    description: "Where Are You Applying for a Visa? ✈️",
     detailedDescription:
-      "Browse through hundreds of airlines and routes to find the ideal flight that matches your travel needs. Our smart search automatically suggests popular destinations.",
+      "Select your departure and destination airports on our checkout page",
     icon: <Search className="h-6 w-6 text-blue-600" />,
     gradient: "from-blue-50 to-blue-100",
     border: "border-blue-200",
     accent: "bg-blue-600",
     time: "~2 mins",
-    tip: "Use flexible dates to find the best rates",
+    tip: "Verify Your Chosen Airports Before Proceeding",
   },
   {
     id: "date",
     title: "Choose Your Date",
     description: "Pick a date that suits your schedule from our calendar.",
     detailedDescription:
-      "Our intuitive calendar highlights the most affordable dates, and allows you to compare prices across different days to maximize your savings.",
+      "Select a suitable date and ensure you choose the correct date",
     icon: <Calendar className="h-6 w-6 text-purple-600" />,
     gradient: "from-purple-50 to-purple-100",
     border: "border-purple-200",
     accent: "bg-purple-600",
     time: "~1 min",
-    tip: "Look for the highlighted dates for the best deals",
+    tip: "Double-Check for Accuracy",
   },
   {
     id: "confirm",

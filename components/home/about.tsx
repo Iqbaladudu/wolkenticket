@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 // Real airline partners with logo URLs
 const airlinePartners = [
@@ -124,7 +125,8 @@ export default function AboutUs() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            About <span className="text-blue-600">WolkenTicket</span>
+            The Smart Traveler's Choice: Secure, Instant, and Embassy-Accepted
+            Documentation
           </motion.h2>
 
           <motion.p
@@ -133,10 +135,11 @@ export default function AboutUs() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           >
-            WolkenTicket makes travel planning simple with fast, secure dummy
-            ticket bookings, trusted by travelers worldwide. Our service
-            provides verified flight reservations that help you with visa
-            applications and travel preparations.
+            WolkenTicket simplifies your travel preparations with instant,
+            secure dummy ticket reservations trusted by over 50,000 global
+            travelers. Our embassy-recognized flight documentation streamlines
+            visa applications and travel planning, giving you peace of mind when
+            it matters most
           </motion.p>
         </div>
 
@@ -193,20 +196,24 @@ export default function AboutUs() {
           className="text-center max-w-3xl mx-auto"
         >
           <h3 className="text-2xl font-semibold mb-4">
-            Ready to simplify your travel preparations?
+            Trusted by Global Nomads in 180+ Countries — Ready to Help You 24/7
           </h3>
           <p className="text-gray-600 mb-6">
-            Join thousands of travelers who trust WolkenTicket for their flight
-            reservation needs. Our fast, secure service is available 24/7 to
-            support your journey.
+            Join over 100++ successful visa applicants who relied on
+            WolkenTicket for embassy-accepted flight documentation. Our
+            lightning-fast service works 24/7 with live support guiding you
+            every step of the way.
           </p>
 
           <Button
+            asChild
             size="lg"
             className="group bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6"
           >
-            <span>Get started today</span>
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <Link href="/checkout">
+              Get started today{" "}
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
           </Button>
         </motion.div>
       </div>

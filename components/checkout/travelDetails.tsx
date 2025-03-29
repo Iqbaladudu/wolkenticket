@@ -269,15 +269,31 @@ export default function TravelDetails({ form, airportsData }: StepProps) {
               )}
             </div>
           </div>
-
-          {/* Decorative elements */}
-          <motion.div
-            className="absolute -right-4 -bottom-4 h-20 w-20 rounded-full bg-indigo-100"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          />
         </motion.div>
       )}
+
+      <motion.div
+        className="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-lg border border-amber-100 relative overflow-hidden"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <div className="flex gap-3">
+          <div className="p-2 bg-amber-100 rounded-full h-fit">
+            <Calendar className="h-4 w-4 text-amber-600" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="font-medium text-amber-800 text-sm">Travel Tips</h3>
+            <p className="text-sm text-amber-700">
+              Select your travel dates carefully.
+            </p>
+          </div>
+        </div>
+
+        {/* Decorative elements */}
+        <div className="absolute -right-3 -bottom-3 h-12 w-12 rounded-full bg-amber-100/50" />
+        <div className="absolute -right-6 -bottom-6 h-8 w-8 rounded-full bg-amber-100/30" />
+      </motion.div>
 
       <div className="space-y-8">
         {/* Airport Selection Section */}
@@ -490,30 +506,6 @@ export default function TravelDetails({ form, airportsData }: StepProps) {
           </div>
         </div>
       </div>
-
-      {/* Tips Card */}
-      <motion.div
-        className="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-lg border border-amber-100 relative overflow-hidden"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <div className="flex gap-3">
-          <div className="p-2 bg-amber-100 rounded-full h-fit">
-            <Calendar className="h-4 w-4 text-amber-600" />
-          </div>
-          <div className="space-y-1">
-            <h3 className="font-medium text-amber-800 text-sm">Travel Tips</h3>
-            <p className="text-sm text-amber-700">
-              Select your travel dates carefully.
-            </p>
-          </div>
-        </div>
-
-        {/* Decorative elements */}
-        <div className="absolute -right-3 -bottom-3 h-12 w-12 rounded-full bg-amber-100/50" />
-        <div className="absolute -right-6 -bottom-6 h-8 w-8 rounded-full bg-amber-100/30" />
-      </motion.div>
     </motion.div>
   );
 }

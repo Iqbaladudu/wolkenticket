@@ -26,50 +26,51 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import { useRef } from "react";
+import Link from "next/link";
 
 const benefits = [
   {
     title: "Easy and Secure Booking",
     description:
-      "Reserve your dummy ticket effortlessly with our trusted platform. Encrypted transactions and verified airline partnerships.",
+      "Book your verifiable dummy ticket in minutes through our secure platform with authentic airline partnerships.",
     gradient: "from-blue-50 to-indigo-100",
     icon: <Shield className="h-6 w-6 text-blue-600" />,
-    highlight: "Verified Secure",
-    stat: "256-bit encryption",
+    highlight: "100% Secure",
+    stat: "Stress-free privacy",
   },
   {
-    title: "Best Price Guarantee",
+    title: "Unbeatable Price Promise",
     description:
-      "Get the most affordable dummy tickets for your travel plans. If you find a lower price, we'll match it instantly.",
+      "Access the most competitive rates for your dummy tickets. Found a better price elsewhere? We'll not just match it — we'll beat it by 5%.",
     gradient: "from-purple-50 to-pink-100",
     icon: <CreditCard className="h-6 w-6 text-purple-600" />,
-    highlight: "Money Back",
-    stat: "Saved 500k+ fees",
+    highlight: "Money Back Guaranteed",
+    stat: "Save more for your next trip",
   },
   {
-    title: "24/7 Customer Support",
+    title: "24/7 Priority Support",
     description:
-      "We're here to help you anytime, day or night. Get personalized assistance with our dedicated support team.",
+      "Never wait for help with our round-the-clock customer care. Get expert assistance from our dedicated team whenever you need it, wherever you are.",
     gradient: "from-teal-50 to-cyan-100",
     icon: <Clock className="h-6 w-6 text-teal-600" />,
-    highlight: "Always Online",
-    stat: "2min avg. response",
+    highlight: "Always at Your Service",
+    stat: "<15min response time",
   },
 ];
 
 // Additional features for the expanded grid
 const additionalFeatures = [
   {
-    title: "Instant Delivery",
+    title: "Lightning-Fast Delivery",
     description:
-      "Receive your tickets in your email inbox within minutes of booking",
+      "Your verified tickets delivered to your inbox in 10-30 minutes — guaranteed. If we're late, your next booking is completely free",
     gradient: "from-amber-50 to-orange-100",
     icon: <Zap className="h-6 w-6 text-amber-600" />,
   },
   {
-    title: "Visa Application Ready",
+    title: "Visa-Compliance Guaranteed",
     description:
-      "Our tickets meet all requirements for visa application processes",
+      "Our dummy tickets are designed to meet and exceed all embassy and consulate requirements worldwide",
     gradient: "from-emerald-50 to-green-100",
     icon: <CheckCircle className="h-6 w-6 text-emerald-600" />,
   },
@@ -152,7 +153,7 @@ export default function Featured() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
           >
-            Dapatkan Tiket Dummy Dengan Mudah!
+            Instant Verified Dummy Flight Tickets: Stress-Free & Simple
           </motion.h2>
 
           <motion.p
@@ -161,7 +162,7 @@ export default function Featured() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Proses cepat, aman, dan terpercaya untuk kebutuhan perjalanan anda
+            Seamless Processing for Worry-Free Travel
           </motion.p>
         </div>
 
@@ -273,12 +274,15 @@ export default function Featured() {
           className="mt-16 text-center"
         >
           <Button
+            asChild
             size="lg"
             className="bg-blue-600 hover:bg-blue-700 rounded-full px-8 py-6 text-white shadow-md hover:shadow-xl transition-all duration-300"
           >
-            <span className="text-base">Book Your Ticket Now</span>
+            <Link href="/checkout">
+              Secure Your Verified Ticket Now — Only $8 | Limited Time Offer
+            </Link>
           </Button>
-
+          a
           <p className="mt-4 text-sm text-gray-500 flex items-center justify-center">
             <Shield className="h-4 w-4 mr-1 text-green-500" />
             <span>Secure, Verified, and Instant Processing</span>

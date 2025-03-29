@@ -380,12 +380,12 @@ export default function FAQ() {
             onValueChange={setActiveCategory}
             className="w-full"
           >
-            <TabsList className="grid grid-cols-2 sm:grid-cols-4 mb-6 sm:mb-8 bg-gray-100/70 p-1 rounded-lg">
+            <TabsList className="flex flex-wrap mb-5 bg-white">
               {faqCategories.map((category) => (
                 <TabsTrigger
                   key={category.id}
                   value={category.id}
-                  className="data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow rounded-md py-2 text-xs sm:text-sm"
+                  className="data-[state=active]:text-blue-700 py-2 text-xs sm:text-sm w-auto"
                   onClick={() => setSearchQuery("")}
                 >
                   <span className="flex items-center">
@@ -543,7 +543,6 @@ export default function FAQ() {
                                 </Badge>
                               )}
                             </div>
-                            <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500 transition-transform duration-300 group-data-[state=open]:rotate-180 flex-shrink-0" />
                           </AccordionTrigger>
                           <AccordionContent className="px-4 sm:px-6 py-3 sm:py-4 text-gray-600 bg-gray-50 border-t border-gray-100 text-xs sm:text-sm">
                             <p>{faq.answer}</p>
@@ -620,17 +619,17 @@ export default function FAQ() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-3 sm:gap-6">
-            <Button className="bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 shadow-sm rounded-full px-4 sm:px-6 py-2 sm:py-6 flex items-center gap-2 h-auto text-xs sm:text-sm">
+            <Button className="bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 shadow-sm rounded-full flex items-center gap-2 h-auto text-xs sm:text-sm">
               <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
               <span>Live Chat</span>
             </Button>
 
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 sm:px-6 py-2 sm:py-6 flex items-center gap-2 shadow-md h-auto text-xs sm:text-sm">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center gap-2 shadow-md h-auto text-xs sm:text-sm">
               <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>Email Support</span>
             </Button>
 
-            <Button className="bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 shadow-sm rounded-full px-4 sm:px-6 py-2 sm:py-6 flex items-center gap-2 h-auto text-xs sm:text-sm">
+            <Button className="bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 shadow-sm rounded-full flex items-center gap-2 h-auto text-xs sm:text-sm">
               <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
               <span>Call Us</span>
             </Button>
