@@ -16,10 +16,8 @@ import {
 
 const client = new Client({
   clientCredentialsAuthCredentials: {
-    oAuthClientId:
-      "Abhb-kbYk0L4r1CB4OTmT-XZ78sic1yEP_-vThk7uB59qc7SwlKDAhadQZqJKZ22hvtGKJZbm-pXK4N2",
-    oAuthClientSecret:
-      "EJBh_fXv02IkzoTKYS5nxk1iPA57POKKJnyN88efbyt0Ag44EDpa2-XnDneGkiKs8GRvO18Id-HefzJs",
+    oAuthClientId: process.env.PAYPAL_API_KEY as string,
+    oAuthClientSecret: process.env.PAYPAL_SECRET as string,
   },
   timeout: 0,
   environment: Environment.Sandbox,

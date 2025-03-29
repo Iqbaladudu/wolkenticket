@@ -42,6 +42,9 @@ import Pay from "./pay";
 import StyledAsyncSelect from "./styledAsyncSelect";
 import { StepProps, AirportOption } from "@/constant/interfaces";
 import TravelDetails from "./travelDetails";
+import CheckoutOptions from "./checkoutOptions";
+import PassengerInfo from "./passengerInfo";
+import BookingProgressBar from "./bookingProgressbar";
 
 // Animation variants
 export const pageVariants = {

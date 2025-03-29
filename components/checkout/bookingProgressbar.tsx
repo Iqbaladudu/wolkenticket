@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Plane, User, CreditCard } from "lucide-react";
 
-function BookingProgressBar({
+export default function BookingProgressBar({
   currentStep,
   totalSteps,
 }: {
