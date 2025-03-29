@@ -1,7 +1,7 @@
 import { StepProps } from "@/constant/interfaces";
 import { motion } from "framer-motion";
 import { User, Mail, Phone, Trash2, Calendar } from "lucide-react";
-import { Button } from "react-day-picker";
+import { Button } from "@/components/ui/button";
 import { useFieldArray } from "react-hook-form";
 import {
   FormField,
