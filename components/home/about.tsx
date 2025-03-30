@@ -125,8 +125,8 @@ export default function AboutUs() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            The Smart Traveler's Choice: Secure, Instant, and Embassy-Accepted
-            Documentation
+            The Smart Traveler&apos;s Choice: Secure, Instant, and
+            Embassy-Accepted Documentation
           </motion.h2>
 
           <motion.p
