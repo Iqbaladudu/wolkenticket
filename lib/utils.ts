@@ -12,3 +12,20 @@ export function convertToSelectOptionsWithCountry(airports: any[]) {
     label: `${airport.name} - ${airport.city}, ${airport.country}`,
   }));
 }
+
+export async function get_access_token() {
+  const auth = `${process.env.PAYPAL_API_KEY}:${process.env.PAYPAL_SECRET}`;
+  const data = "grant_type=client_credentials";
+  return await fetch(process.env.PAYPAL_ENDPOINT + "/v1/oauth2/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${Buffer.from(auth).toString("base64")}`,
+    },
+    body: data,
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      return json.access_token;
+    });
+}

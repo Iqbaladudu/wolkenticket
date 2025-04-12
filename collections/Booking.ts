@@ -13,6 +13,8 @@ import {
   PaypalExperienceUserAction,
   ShippingPreference,
 } from "@paypal/paypal-server-sdk";
+import { get_access_token } from "@/lib/utils";
+import { nanoid } from "nanoid";
 
 const client = new Client({
   clientCredentialsAuthCredentials: {
@@ -304,6 +306,7 @@ export const BookingsCollection: CollectionConfig = {
       name: "bookingStatus",
       type: "select",
       defaultValue: "pending",
+
       options: [
         {
           label: "Pending",
@@ -346,21 +349,121 @@ export const BookingsCollection: CollectionConfig = {
   timestamps: true,
   endpoints: [
     {
-      path: "/pay",
+      path: "/create-order",
       method: "post",
-      handler: async () => {
+      handler: async (req) => {
         try {
-          const data = await createOrder();
-          return NextResponse.json(
+          const reqData = await req?.json();
+          const accessToken = await get_access_token();
+
+          const orderDataJson = {
+            intent: reqData?.intent?.toUpperCase() || "CAPTURE",
+            purchase_units: [
+              {
+                amount: {
+                  currency_code: "USD",
+                  value: `${reqData?.amount * 8}`,
+                },
+              },
+            ],
+          };
+
+          const response = await fetch(
+            `${process.env.PAYPAL_ENDPOINT}/v2/checkout/orders`,
             {
-              ...data?.jsonResponse,
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+                "PayPal-Request-Id": nanoid(),
+              },
+              body: JSON.stringify(orderDataJson),
             },
-            { status: data?.httpStatusCode },
           );
+
+          if (!response.ok) {
+            return NextResponse.json(
+              { error: "Failed to create PayPal order" },
+              { status: response.status },
+            );
+          }
+
+          const paypalResponse = await response.json();
+          return NextResponse.json({ ...paypalResponse }, { status: 200 });
         } catch (error) {
-          return NextResponse.json({
-            error: error,
-          });
+          console.error("Error creating PayPal order:", error);
+          return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 },
+          );
+        }
+      },
+    },
+    {
+      path: "/capture/:order_id",
+      method: "post",
+      handler: async (req) => {
+        try {
+          const params = req.routeParams;
+          const accessToken = await get_access_token();
+          console.log(accessToken);
+          console.log(params?.order_id);
+          const response = await fetch(
+            `${process.env.PAYPAL_ENDPOINT}/v2/checkout/orders/${params?.order_id}/capture`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+            },
+          );
+
+          const paypalResponse = await response.json();
+          return NextResponse.json({ ...paypalResponse }, { status: 200 });
+        } catch (e) {
+          return NextResponse.json({ e }, { status: 500 });
+        }
+      },
+    },
+    {
+      path: "/complete-order",
+      method: "post",
+      handler: async (req) => {
+        try {
+          const accessToken = await get_access_token();
+          const { order_id, intent } = await req.json();
+          console.log(order_id, intent);
+
+          const response = await fetch(
+            `${process.env.PAYPAL_ENDPOINT}/v2/checkout/orders/${order_id}/${intent}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+            },
+          );
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            return NextResponse.json(
+              { message: "Failed to create PayPal order", ...errorData },
+              { status: response.status },
+            );
+          }
+
+          const paypalResponse = await response.json();
+          console.log("PayPal order completed:", paypalResponse);
+
+          return NextResponse.json({ ...paypalResponse }, { status: 200 });
+        } catch (error) {
+          console.error("Error completing PayPal order:", error);
+          return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 },
+          );
         }
       },
     },
