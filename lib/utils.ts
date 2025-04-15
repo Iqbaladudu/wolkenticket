@@ -14,7 +14,15 @@ export function convertToSelectOptionsWithCountry(airports: any[]) {
 }
 
 export async function get_access_token() {
-  const auth = `${process.env.PAYPAL_API_KEY}:${process.env.PAYPAL_SECRET}`;
+  const auth = `${
+    process.env.NODE_ENV === "development"
+      ? process.env.PAYPAL_API_KEY_DEV
+      : process.env.PAYPAL_API_KEY
+  }:${
+    process.env.NODE_ENV === "development"
+      ? process.env.PAYPAL_SECRET_DEV
+      : process.env.PAYPAL_SECRET
+  }`;
   const data = "grant_type=client_credentials";
   return await fetch(process.env.PAYPAL_ENDPOINT + "/v1/oauth2/token", {
     method: "POST",

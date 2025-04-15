@@ -85,18 +85,18 @@ const faqCategories: FaqCategory[] = [
       {
         question: "Can I cancel or modify my booking?",
         answer:
-          "Absolutely. You can manage your booking through our portal. Cancellation and modification policies depend on the airline, but we'll assist you throughout the process. Any changes should be made at least 24 hours before the scheduled departure.",
+          "Please note that cancellations are not permitted after booking. However, modifications to your booking, such as changing the date or time of departure, are allowed. If you wish to make any changes, kindly contact us through our customer service for assistance.",
         popular: true,
       },
       {
         question: "What is your refund policy?",
         answer:
-          "Our refund policy varies depending on the type of ticket purchased. Full refunds are available for cancellations made within 24 hours of booking. After that period, refund amounts may be subject to airline policies and booking terms. Processing typically takes 5-7 business days.",
+          "We do not offer refunds under any circumstances. All ticket purchases are final and non-refundable. Please ensure that you review your booking details carefully before completing your purchase, as no exceptions will be made for cancellations",
       },
       {
         question: "How do I change my travel dates?",
         answer:
-          "To change your travel dates, log in to your account, select the booking you wish to modify, and click on the 'Change Dates' option. Follow the prompts to select new travel dates. Change fees may apply based on the airline's policy and fare rules.",
+          "To change your travel dates, please contact our customer service team for assistance. They will help with the process and any applicable fees or conditions. Reach us via Whatsapp or email",
       },
     ],
   },
@@ -108,18 +108,18 @@ const faqCategories: FaqCategory[] = [
       {
         question: "What payment methods are accepted?",
         answer:
-          "We accept credit/debit cards (Visa, Mastercard, American Express), bank transfers, and select digital wallets including PayPal, Apple Pay, and Google Pay for a seamless payment experience. All transactions are processed securely with industry-standard encryption.",
+          "We accept credit/debit cards (Visa, Mastercard, American Express), bank transfer (manual), and PayPal for a seamless payment experience. All transactions are processed securely.",
         popular: true,
       },
       {
         question: "Is my payment information secure?",
         answer:
-          "Absolutely. We employ industry-leading SSL encryption and comply with PCI DSS standards to ensure your payment information is always protected. We never store your complete credit card details on our servers.",
+          "Yes, your payment information is secure. We use industry-standard encryption and comply with strict privacy policies to protect your data. Contact customer service for any concerns.",
       },
       {
         question: "Are there any hidden fees?",
         answer:
-          "No hidden fees! We believe in transparent pricing. The price you see during checkout includes all necessary taxes and fees. Any optional add-ons are clearly marked with their respective costs before you complete your purchase.",
+          "No hidden fees! We believe in transparent pricing. The price you see during checkout includes all necessary taxes and fees.",
       },
     ],
   },
@@ -131,7 +131,7 @@ const faqCategories: FaqCategory[] = [
       {
         question: "How can I contact customer support?",
         answer:
-          "Our customer support team is available 24/7 via live chat on our website, email at support@wolkenticket.com, or by phone at +1-800-123-4567. We typically respond to all inquiries within 2 hours during business hours and within 12 hours outside of business hours.",
+          "Our customer support team is available 24/7 via live chat on our website, email at support@wolkenticket.com, or WhatsApp at +6281364791810. We typically respond to inquiries within 30 minutes to 2 hours at all times.",
       },
       {
         question: "What information do I need for visa applications?",

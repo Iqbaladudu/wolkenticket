@@ -35,8 +35,14 @@ const Pay: React.FC<PayProps> = ({ quantity }) => {
 
   // PayPal SDK initial options
   const initialOptions: ReactPayPalScriptOptions = {
-    "client-id": process.env.NEXT_PUBLIC_PAYPAL_API_KEY,
-    clientId: (process.env.NEXT_PUBLIC_PAYPAL_API_KEY as string) || "",
+    "client-id":
+      process.env.NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_PAYPAL_API_KEY_DEV
+        : process.env.NEXT_PUBLIC_PAYPAL_API_KEY,
+    clientId:
+      process.env.NODE_ENV === "development"
+        ? (process.env.NEXT_PUBLIC_PAYPAL_API_KEY_DEV as string)
+        : (process.env.NEXT_PUBLIC_PAYPAL_API_KEY as string),
     "enable-funding": "venmo",
     "disable-funding": "paylater",
     currency: "USD",

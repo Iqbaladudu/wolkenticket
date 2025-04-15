@@ -15,8 +15,14 @@ import { nanoid } from "nanoid";
 
 const client = new Client({
   clientCredentialsAuthCredentials: {
-    oAuthClientId: process.env.PAYPAL_API_KEY as string,
-    oAuthClientSecret: process.env.PAYPAL_SECRET as string,
+    oAuthClientId:
+      process.env.NODE_ENV === "development"
+        ? (process.env.PAYPAL_API_KEY_DEV as string)
+        : (process.env.PAYPAL_API_KEY as string),
+    oAuthClientSecret:
+      process.env.NODE_ENV === "development"
+        ? (process.env.PAYPAL_API_SECRET_DEV as string)
+        : (process.env.PAYPAL_SECRET as string),
   },
   timeout: 0,
   environment: Environment.Sandbox,
@@ -372,7 +378,7 @@ export const BookingsCollection: CollectionConfig = {
           };
 
           const response = await fetch(
-            `${process.env.PAYPAL_ENDPOINT}/v2/checkout/orders`,
+            `${process.env.NODE_ENV === "development" ? process.env.PAYPAL_ENDPOINT_DEV : process.env.PAYPAL_ENDPOINT}/v2/checkout/orders`,
             {
               method: "POST",
               headers: {
@@ -409,7 +415,7 @@ export const BookingsCollection: CollectionConfig = {
           const params = req.routeParams;
           const accessToken = await get_access_token();
           const response = await fetch(
-            `${process.env.PAYPAL_ENDPOINT}/v2/checkout/orders/${params?.order_id}/capture`,
+            `${process.env.NODE_ENV === "development" ? process.env.PAYPAL_ENDPOINT_DEV : process.env.PAYPAL_ENDPOINT}/v2/checkout/orders/${params?.order_id}/capture`,
             {
               method: "POST",
               headers: {
@@ -435,7 +441,7 @@ export const BookingsCollection: CollectionConfig = {
           const { order_id, intent } = await req.json();
 
           const response = await fetch(
-            `${process.env.PAYPAL_ENDPOINT}/v2/checkout/orders/${order_id}/${intent}`,
+            `${process.env.NODE_ENV === "development" ? process.env.PAYPAL_ENDPOINT_DEV : process.env.PAYPAL_ENDPOINT}/v2/checkout/orders/${order_id}/${intent}`,
             {
               method: "POST",
               headers: {
