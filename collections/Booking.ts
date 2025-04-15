@@ -9,9 +9,6 @@ import {
   LogLevel,
   OrdersController,
   PaymentsController,
-  PaypalExperienceLandingPage,
-  PaypalExperienceUserAction,
-  ShippingPreference,
 } from "@paypal/paypal-server-sdk";
 import { get_access_token } from "@/lib/utils";
 import { nanoid } from "nanoid";
@@ -286,10 +283,6 @@ export const BookingsCollection: CollectionConfig = {
       required: true,
       options: [
         {
-          label: "Credit Card",
-          value: "credit_card",
-        },
-        {
           label: "PayPal",
           value: "paypal",
         },
@@ -301,6 +294,16 @@ export const BookingsCollection: CollectionConfig = {
       admin: {
         description: "Method of payment",
       },
+    },
+    {
+      name: "transaction_id",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "booking_code",
+      type: "text",
+      required: false,
     },
     {
       name: "bookingStatus",
@@ -391,7 +394,6 @@ export const BookingsCollection: CollectionConfig = {
           const paypalResponse = await response.json();
           return NextResponse.json({ ...paypalResponse }, { status: 200 });
         } catch (error) {
-          console.error("Error creating PayPal order:", error);
           return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 },
@@ -406,8 +408,6 @@ export const BookingsCollection: CollectionConfig = {
         try {
           const params = req.routeParams;
           const accessToken = await get_access_token();
-          console.log(accessToken);
-          console.log(params?.order_id);
           const response = await fetch(
             `${process.env.PAYPAL_ENDPOINT}/v2/checkout/orders/${params?.order_id}/capture`,
             {
@@ -433,7 +433,6 @@ export const BookingsCollection: CollectionConfig = {
         try {
           const accessToken = await get_access_token();
           const { order_id, intent } = await req.json();
-          console.log(order_id, intent);
 
           const response = await fetch(
             `${process.env.PAYPAL_ENDPOINT}/v2/checkout/orders/${order_id}/${intent}`,
@@ -455,11 +454,9 @@ export const BookingsCollection: CollectionConfig = {
           }
 
           const paypalResponse = await response.json();
-          console.log("PayPal order completed:", paypalResponse);
 
           return NextResponse.json({ ...paypalResponse }, { status: 200 });
         } catch (error) {
-          console.error("Error completing PayPal order:", error);
           return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 },

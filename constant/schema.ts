@@ -1,3 +1,4 @@
+import { initTransaction } from "payload";
 import { z } from "zod";
 
 export const formSchema = z
@@ -43,7 +44,10 @@ export const formSchema = z
         }),
       )
       .min(1, "At least one passenger is required"),
-    paymentMethod: z.enum(["credit_card", "paypal", "bank_transfer"]),
+    paymentMethod: z.enum(["paypal", "bank_transfer"]),
+    transaction_id: z
+      .string()
+      .min(17, "Transaction ID must be at least 17 characters long"),
   })
   .superRefine((data, ctx) => {
     // Only validate returnDate if flight type is roundTrip

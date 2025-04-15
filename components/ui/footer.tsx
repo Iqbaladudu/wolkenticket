@@ -2,8 +2,6 @@
 
 import * as React from "react";
 import { Facebook, Instagram, Twitter, Github, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
 interface FooterLinkGroupProps {
@@ -57,8 +55,6 @@ const Footer: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle newsletter subscription
-    console.log("Subscribing email:", email);
     setEmail("");
   };
 
@@ -146,9 +142,6 @@ const Footer: React.FC = () => {
             </SocialIcon>
             <SocialIcon href="https://facebook.com" ariaLabel="Facebook">
               <Facebook className="h-4 w-4" />
-            </SocialIcon>
-            <SocialIcon href="https://github.com" ariaLabel="GitHub">
-              <Github className="h-4 w-4" />
             </SocialIcon>
             <SocialIcon href="mailto:info@company.com" ariaLabel="Email">
               <Mail className="h-4 w-4" />

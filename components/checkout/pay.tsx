@@ -9,10 +9,13 @@ import {
 import { useRouter } from "next/navigation";
 import PaymentFailed from "../ui/paymentFailed";
 import PaymentSuccess from "../ui/paymentSuccess";
+import { submitForm } from "@/action/submit.action";
+import { motion } from "framer-motion"; // Tambahkan import framer-motion
+import { useCheckoutForm } from "@/context/checkoutFormContext";
 
 // Define interface for message state
 interface TransactionState {
-  status?: "FAILED" | "SUCCESS";
+  status?: "FAILED" | "SUCCESS" | "PROCESSING"; // Tambahkan status PROCESSING
   detail?: string;
   orderId?: string;
 }
@@ -27,6 +30,8 @@ const Pay: React.FC<PayProps> = ({ quantity }) => {
   const [transactionState, setTransactionState] = useState<TransactionState>(
     {},
   );
+
+  const { form } = useCheckoutForm();
 
   // PayPal SDK initial options
   const initialOptions: ReactPayPalScriptOptions = {
@@ -51,6 +56,100 @@ const Pay: React.FC<PayProps> = ({ quantity }) => {
     router.push("/");
   };
 
+  // Render processing animation
+  const renderProcessingAnimation = () => (
+    <div className="flex flex-col items-center justify-center py-10">
+      <motion.div
+        className="relative w-32 h-32"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Outer circle */}
+        <motion.div
+          className="absolute inset-0 rounded-full border-4 border-blue-200"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        />
+
+        {/* Spinning circle */}
+        <motion.div
+          className="absolute inset-0 rounded-full border-4 border-t-blue-500 border-r-transparent border-b-transparent border-l-transparent"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+        />
+
+        {/* Inner checkmark container (appears after spinning) */}
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 2, duration: 0.5 }}
+        >
+          <motion.svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-green-500"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ delay: 2.3, duration: 0.8, ease: "easeOut" }}
+          >
+            <path d="M20 6L9 17l-5-5" />
+          </motion.svg>
+        </motion.div>
+      </motion.div>
+
+      <motion.h3
+        className="mt-6 text-xl font-medium text-gray-800"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+      >
+        Processing your payment
+      </motion.h3>
+
+      <motion.div
+        className="mt-4 flex space-x-1"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        {[0, 1, 2].map((dot) => (
+          <motion.div
+            key={dot}
+            className="w-2 h-2 rounded-full bg-blue-500"
+            initial={{ opacity: 0.3 }}
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{
+              duration: 1.2,
+              repeat: Infinity,
+              delay: dot * 0.4,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </motion.div>
+
+      <motion.p
+        className="mt-4 text-sm text-gray-600 max-w-xs text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
+      >
+        Please wait while we confirm your payment and secure your tickets. This
+        will only take a moment.
+      </motion.p>
+    </div>
+  );
+
   // Render payment result based on transaction state
   const renderPaymentResult = () => {
     switch (transactionState.status) {
@@ -70,6 +169,8 @@ const Pay: React.FC<PayProps> = ({ quantity }) => {
             errorMessage={transactionState.detail}
           />
         );
+      case "PROCESSING":
+        return renderProcessingAnimation();
       default:
         return null;
     }
@@ -101,7 +202,6 @@ const Pay: React.FC<PayProps> = ({ quantity }) => {
         throw new Error(errorMessage);
       }
     } catch (error) {
-      console.error("Error creating order:", error);
       setTransactionState({
         status: "FAILED",
         detail:
@@ -116,6 +216,12 @@ const Pay: React.FC<PayProps> = ({ quantity }) => {
   // Handle payment approval/capture
   const handleApprove = async (data: { orderID: string }, actions: any) => {
     try {
+      // Set processing state immediately when payment is approved
+      setTransactionState({
+        status: "PROCESSING",
+        detail: "Processing your payment",
+      });
+
       const response = await fetch(`/api/bookings/capture/${data.orderID}`, {
         method: "POST",
         headers: {
@@ -128,6 +234,7 @@ const Pay: React.FC<PayProps> = ({ quantity }) => {
 
       if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
         // Recoverable error: restart payment flow
+        setTransactionState({}); // Clear processing state
         return actions.restart();
       } else if (errorDetail) {
         // Non-recoverable error
@@ -135,19 +242,21 @@ const Pay: React.FC<PayProps> = ({ quantity }) => {
       } else {
         // Successful transaction
         const transaction = orderData.purchase_units[0].payments.captures[0];
-        setTransactionState({
-          status: "SUCCESS",
-          detail: "Transaction successful",
-          orderId: transaction.id,
-        });
-        console.log(
-          "Capture result",
-          orderData,
-          JSON.stringify(orderData, null, 2),
-        );
+        form.setValue("transaction_id", transaction.id);
+
+        // Submit form with a slight delay to allow animation to be visible
+        await submitForm({ formData: form.getValues(), status: "confirmed" });
+
+        // Show success state after processing
+        setTimeout(() => {
+          setTransactionState({
+            status: "SUCCESS",
+            detail: "Transaction successful",
+            orderId: transaction.id,
+          });
+        }, 3000);
       }
     } catch (error) {
-      console.error("Error capturing payment:", error);
       setTransactionState({
         status: "FAILED",
         detail:
@@ -160,7 +269,6 @@ const Pay: React.FC<PayProps> = ({ quantity }) => {
 
   return (
     <div className="mx-auto">
-      {/* Display payment result if transaction state is set */}
       {transactionState.status ? (
         renderPaymentResult()
       ) : (

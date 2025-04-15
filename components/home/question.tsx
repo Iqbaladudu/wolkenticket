@@ -602,39 +602,6 @@ export default function FAQ() {
             </div>
           </div>
         </motion.div>
-
-        {/* Still have questions */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-10 sm:mt-12 md:mt-16 text-center bg-gradient-to-r from-blue-50 to-indigo-50 p-6 sm:p-8 rounded-xl sm:rounded-2xl border border-blue-100"
-        >
-          <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-gray-900">
-            Still have questions?
-          </h3>
-          <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8 max-w-xl mx-auto">
-            Our customer support team is here to help you with any questions or
-            concerns you may have.
-          </p>
-
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-6">
-            <Button className="bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 shadow-sm rounded-full flex items-center gap-2 h-auto text-xs sm:text-sm">
-              <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-              <span>Live Chat</span>
-            </Button>
-
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center gap-2 shadow-md h-auto text-xs sm:text-sm">
-              <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span>Email Support</span>
-            </Button>
-
-            <Button className="bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 shadow-sm rounded-full flex items-center gap-2 h-auto text-xs sm:text-sm">
-              <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-              <span>Call Us</span>
-            </Button>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

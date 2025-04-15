@@ -13,6 +13,7 @@ import {
   CarTaxiFront,
   Bus,
   Headphones,
+  Search,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -65,18 +66,35 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="sm"
+              asChild
               className="hidden md:inline-flex items-center rounded-full text-sm font-medium transition-colors hover:bg-blue-50 hover:text-blue-600"
             >
-              <Tickets className="mr-2 h-4 w-4" />
-              <span>Lihat Pesanan</span>
+              <Link href={"/view-booking"}>
+                <Tickets className="mr-2 h-4 w-4" />
+                <span>View booking</span>
+              </Link>
             </Button>
 
             <Button
+              variant="ghost"
               size="sm"
+              asChild
+              className="hidden md:inline-flex items-center rounded-full text-sm font-medium transition-colors hover:bg-blue-50 hover:text-blue-600"
+            >
+              <Link href={"/contact"}>
+                <Headphones className="mr-2 h-4 w-4" />
+                <span>Contact us</span>
+              </Link>
+            </Button>
+
+            <Button
+              size="lg"
               className="hidden md:inline-flex items-center rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm transition-all duration-300 hover:shadow-md hover:translate-y-[-1px]"
             >
-              <Headphones className="mr-2 h-4 w-4" />
-              <span>Contact Us</span>
+              <Link href={"/checkout"} className="md:inline-flex items-center">
+                <Search className="mr-2 h-4 w-4" />
+                <span>Book now</span>
+              </Link>
             </Button>
 
             {/* Services Dropdown (Tablets) */}
@@ -123,21 +141,28 @@ export default function Navbar() {
               <ul className="">
                 <li>
                   <MobileNavItem
-                    href="/orders"
+                    href="/view-booking"
                     icon={<Tickets className="h-4 w-4" />}
-                    onClick={() => setIsMenuOpen(false)}
                   >
-                    Lihat Pesanan
+                    View booking
+                  </MobileNavItem>
+                </li>
+                <li>
+                  <MobileNavItem
+                    href="/contact"
+                    icon={<Headphones className="h-4 w-4" />}
+                  >
+                    Contact
                   </MobileNavItem>
                 </li>
                 <li>
                   <Link
-                    href="/contact"
+                    href="/checkout"
                     className="mt-4 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:shadow-md"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Headphones className="mr-2 h-4 w-4" />
-                    Contact Us
+                    <Search className="mr-2 h-4 w-4" />
+                    Book now
                   </Link>
                 </li>
               </ul>

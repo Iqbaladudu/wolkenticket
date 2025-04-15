@@ -1,12 +1,10 @@
 import { StepProps } from "@/constant/interfaces";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { CreditCard, CheckCircle2 } from "lucide-react";
-import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { CreditCard } from "lucide-react";
 import { FormValues, pageVariants } from "./main";
 import Pay from "./pay";
 import { UseFormReturn } from "react-hook-form";
-import PaymentSuccess from "../ui/paymentSuccess";
 
 export default function CheckoutOptions({ form }: StepProps) {
   const qty = form.getValues().passengers.length;
@@ -31,7 +29,6 @@ export default function CheckoutOptions({ form }: StepProps) {
           <h3 className="font-medium text-green-800 mb-2">Booking Summary</h3>
           <SummaryItem form={form} />
         </div>
-        {/* <PaymentSuccess /> */}
         <Pay quantity={qty} />
       </div>
     </motion.div>

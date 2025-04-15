@@ -11,6 +11,7 @@ import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { BookingsCollection } from "./collections/Booking";
 import { Products } from "./collections/Product";
+import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -34,6 +35,25 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
+    formBuilderPlugin({
+      formOverrides: {
+        access: {
+          read: () => true,
+        },
+      },
+      fields: {
+        text: true,
+        textarea: true,
+        select: true,
+        email: true,
+        state: true,
+        country: true,
+        checkbox: true,
+        number: true,
+        message: true,
+        payment: false,
+      },
+    }),
     // storage-adapter-placeholder
   ],
 });

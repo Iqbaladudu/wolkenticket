@@ -1,7 +1,6 @@
 "use server";
 
 import { formSchema } from "@/constant/schema";
-import { revalidatePath } from "next/cache";
 import { getPayload } from "payload";
 import { z } from "zod";
 import config from "@payload-config";
@@ -15,9 +14,13 @@ interface SubmissionResponse {
   fieldErrors?: Record<string, string[]>;
 }
 
-export async function submitForm(
-  formData: z.infer<typeof formSchema>,
-): Promise<SubmissionResponse> {
+export async function submitForm({
+  formData,
+  status,
+}: {
+  formData: z.infer<typeof formSchema>;
+  status: "confirmed";
+}): Promise<SubmissionResponse> {
   try {
     // Convert FormData to a plain object
     const data = Object.fromEntries(
@@ -41,7 +44,7 @@ export async function submitForm(
 
     // Create a record in the database
     const result = await payload.create({
-      collection: "bookings", // Replace with your actual collection name
+      collection: "bookings",
       data: {
         flightType: validData.flightType,
         departureCity: {
@@ -58,23 +61,20 @@ export async function submitForm(
         paymentMethod: validData.paymentMethod,
         email: validData.email,
         phone: validData.phone,
-        bookingStatus: "pending",
+        transaction_id: validData.transaction_id,
+        bookingStatus: status,
+        totalPrice: validData.passengers.length * 8,
       },
     });
 
-    // Revalidate related pages to update cached data
-    // revalidatePath("/path-to-revalidate"); // Replace with your actual path
-
     return {
       success: true,
-      // result,
+      result,
     };
   } catch (error: unknown) {
     // Properly type the error
     const errorMessage =
       error instanceof Error ? error.message : "An unknown error occurred";
-
-    console.error("Form submission error:", error);
 
     return {
       success: false,
