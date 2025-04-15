@@ -537,14 +537,15 @@ const NoResultsView: React.FC<{
             </h3>
 
             <p className="text-gray-600 mb-5">
-              We couldn't find any bookings matching "
-              <span className="font-medium text-gray-800">{searchCode}</span>"
+              We couldn&apos;t find any bookings matching &quot
+              <span className="font-medium text-gray-800">{searchCode}</span>
+              &quot;
             </p>
 
             <div className="text-left bg-gray-50 p-4 rounded-lg border border-gray-200 mb-5">
               <p className="text-sm text-gray-600 mb-2">Please check that:</p>
               <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                <li>You've entered the correct ID</li>
+                <li>You&apos;ve entered the correct ID</li>
                 <li>Check your email for the reference number</li>
                 <li>New bookings may take a moment to appear</li>
               </ul>
