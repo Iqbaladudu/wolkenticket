@@ -39,7 +39,6 @@ const Pay: React.FC<PayProps> = ({ quantity }) => {
     clientId: (process.env.NEXT_PUBLIC_PAYPAL_API_KEY as string) || "",
     "enable-funding": "venmo",
     "disable-funding": "paylater",
-    "buyer-country": "CA",
     currency: "USD",
     "data-page-type": "product-details",
     components: "buttons",
