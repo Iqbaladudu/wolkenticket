@@ -11,7 +11,9 @@ import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { BookingsCollection } from "./collections/Booking";
 import { Products } from "./collections/Product";
+
 import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
+import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -56,4 +58,17 @@ export default buildConfig({
     }),
     // storage-adapter-placeholder
   ],
+  email: nodemailerAdapter({
+    defaultFromAddress: "support@wolkenticket.com",
+    defaultFromName: "Wolkenticket Support",
+    skipVerify: true,
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    },
+  }),
 });

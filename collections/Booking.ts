@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { CollectionConfig } from "payload";
+import config from "@payload-config";
 
 import {
   ApiError,
@@ -10,8 +11,9 @@ import {
   OrdersController,
   PaymentsController,
 } from "@paypal/paypal-server-sdk";
-import { get_access_token } from "@/lib/utils";
+import { generateBookingEmail, get_access_token } from "@/lib/utils";
 import { nanoid } from "nanoid";
+import { getPayload } from "payload";
 
 const client = new Client({
   clientCredentialsAuthCredentials: {
@@ -426,6 +428,7 @@ export const BookingsCollection: CollectionConfig = {
           );
 
           const paypalResponse = await response.json();
+          console.log(paypalResponse.payer.email_address);
           return NextResponse.json({ ...paypalResponse }, { status: 200 });
         } catch (e) {
           return NextResponse.json({ e }, { status: 500 });
@@ -471,4 +474,23 @@ export const BookingsCollection: CollectionConfig = {
       },
     },
   ],
+  hooks: {
+    afterOperation: [
+      async (args) => {
+        if (args.operation === "create") {
+          const payload = await getPayload({ config });
+
+          try {
+            payload.sendEmail({
+              to: args.result.email as string,
+              subject: "Order Confirmation",
+              body: generateBookingEmail(args.result),
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      },
+    ],
+  },
 };

@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/QueryProvider";
 import { CheckoutFormProvider } from "@/context/checkoutFormContext";
+import { Analytics } from "@vercel/analytics/react";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-geist-sans",
@@ -26,7 +27,10 @@ export default function RootLayout({
           suppressHydrationWarning
           className={`${jakarta.className} antialiased mb-10`}
         >
-          <CheckoutFormProvider>{children}</CheckoutFormProvider>
+          <CheckoutFormProvider>
+            {children}
+            <Analytics />
+          </CheckoutFormProvider>
         </body>
       </QueryProvider>
     </html>

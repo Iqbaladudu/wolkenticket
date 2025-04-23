@@ -8,6 +8,7 @@ import AboutUs from "@/components/home/about";
 import Footer from "@/components/ui/footer";
 
 export default function Home() {
+  console.log(process.env.NODE_ENV);
   return (
     <>
       <Navbar />

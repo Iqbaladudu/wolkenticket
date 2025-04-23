@@ -537,7 +537,7 @@ const NoResultsView: React.FC<{
             </h3>
 
             <p className="text-gray-600 mb-5">
-              We couldn&apos;t find any bookings matching &quot
+              We couldn&apos;t find any bookings matching &quot;
               <span className="font-medium text-gray-800">{searchCode}</span>
               &quot;
             </p>
