@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <GoogleTagManager gtmId="BQ9J3MXCS1" />
+      <GoogleTagManager gtmId="G-BQ9J3MXCS1" />
       <body
         suppressHydrationWarning
         className={`${jakarta.className} antialiased mb-10`}
