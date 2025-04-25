@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import favicon from "@/lib/favicon";
 import Script from "next/script";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-geist-sans",
@@ -26,27 +27,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Script
-        dangerouslySetInnerHTML={{
-          __html: ` (function(c,l,a,r,i,t,y){
-               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-               t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-               y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-           })(window, document, "clarity", "script", "r9k5z1fjs5");`,
-        }}
-      />
-      <QueryProvider>
-        <body
-          suppressHydrationWarning
-          className={`${jakarta.className} antialiased mb-10`}
-        >
+      <GoogleTagManager gtmId="BQ9J3MXCS1" />
+      <body
+        suppressHydrationWarning
+        className={`${jakarta.className} antialiased mb-10`}
+      >
+        <QueryProvider>
           <CheckoutFormProvider>
             {children}
             <Analytics />
             <SpeedInsights />
           </CheckoutFormProvider>
-        </body>
-      </QueryProvider>
+        </QueryProvider>
+        <Script>
+          {`(function(c,l,a,r,i,t,y){
+                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+             })(window, document, "clarity", "script", "r9k5z1fjs5");`}
+        </Script>
+      </body>
     </html>
   );
 }
