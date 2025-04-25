@@ -7,7 +7,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import favicon from "@/lib/favicon";
 import Script from "next/script";
-import { GoogleTagManager } from "@next/third-parties/google";
+import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-geist-sans",
@@ -27,7 +27,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <GoogleTagManager gtmId="G-BQ9J3MXCS1" />
+      <GoogleTagManager gtmId="GTM-5P7KSW25" />
+      <GoogleAnalytics gaId="G-BQ9J3MXCS1" />
       <body
         suppressHydrationWarning
         className={`${jakarta.className} antialiased mb-10`}
