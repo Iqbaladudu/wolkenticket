@@ -484,7 +484,7 @@ export const BookingsCollection: CollectionConfig = {
             payload.sendEmail({
               to: args.result.email as string,
               subject: "Order Confirmation",
-              body: generateBookingEmail(args.result),
+              html: generateBookingEmail(args.result),
             });
           } catch (error) {
             console.error(error);

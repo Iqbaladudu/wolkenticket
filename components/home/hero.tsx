@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Cloud, Plane } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";

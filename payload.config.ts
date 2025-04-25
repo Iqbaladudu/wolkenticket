@@ -3,7 +3,7 @@ import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { payloadCloudPlugin } from "@payloadcms/payload-cloud";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
-import { buildConfig } from "payload";
+import { buildConfig, getPayload } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
 
@@ -14,6 +14,7 @@ import { Products } from "./collections/Product";
 
 import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
+import { NextResponse } from "next/server";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);

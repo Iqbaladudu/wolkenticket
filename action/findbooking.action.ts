@@ -16,6 +16,11 @@ export async function findBookingAction(code: string) {
               equals: code,
             },
           },
+          {
+            id: {
+              equals: code,
+            },
+          },
         ],
       },
     });
