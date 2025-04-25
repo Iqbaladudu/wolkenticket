@@ -4,6 +4,7 @@ import "./globals.css";
 import QueryProvider from "@/components/QueryProvider";
 import { CheckoutFormProvider } from "@/context/checkoutFormContext";
 import { Analytics } from "@vercel/analytics/react";
+import favicon from "@/lib/favicon";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-geist-sans",
@@ -13,6 +14,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "Wolkenticket | Get Your Ticket In Minutes",
   description: "Get Your Ticket In Minutes",
+  icons: favicon,
 };
 
 export default function RootLayout({
