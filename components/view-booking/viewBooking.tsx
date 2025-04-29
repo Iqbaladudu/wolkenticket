@@ -80,7 +80,7 @@ const FullScreenLookupForm: React.FC<{
               <TicketIcon className="h-8 w-8 text-blue-600" />
             </div>
             {/* Add H1 for the main title */}
-            <CardTitle as="h1" className="text-3xl font-bold text-gray-900">
+            <CardTitle className="text-3xl font-bold text-gray-900">
               View Your Booking
             </CardTitle>
             <CardDescription className="text-gray-600 pt-1">

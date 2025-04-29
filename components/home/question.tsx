@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { motion, useInView, AnimatePresence, Variants } from "framer-motion";
 import Script from 'next/script'; // Import Script for JSON-LD
+import { Card, CardContent } from "../ui/card";
 
 // Define types
 interface FaqQuestion {
