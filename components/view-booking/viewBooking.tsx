@@ -113,7 +113,7 @@ const FullScreenLookupForm: React.FC<{
           </CardContent>
         </Card>
         <p className="text-xs text-gray-500 mt-4">
-          Can't find your code? Check your confirmation email or{" "}
+          Can&apos;t find your code? Check your confirmation email or{" "}
           <a href="/contact" className="text-blue-600 hover:underline">contact support</a>.
         </p>
       </motion.div>

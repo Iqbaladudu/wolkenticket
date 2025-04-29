@@ -329,7 +329,7 @@ export default function QnA() {
                   exit="exit"
                   className="space-y-4"
                 >
-                  <h3 className="text-xl font-semibold text-gray-800 mb-4">Search Results for "{searchTerm}"</h3>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-4">Search Results for &quot;{searchTerm}&quot;</h3>
                   {filteredQuestions.length > 0 ? (
                     filteredQuestions.map((q, index) => (
                       <motion.div key={`search-${index}`} variants={itemVariants}>
@@ -413,7 +413,7 @@ export default function QnA() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">Can't find an answer?</h3>
+            <h3 className="text-2xl font-bold mb-4 text-gray-900">Can&apos;t find an answer?</h3>
             <p className="text-gray-600 mb-6 max-w-lg mx-auto">
               Our support team is ready to help you 24/7. Reach out via email or phone for personalized assistance.
             </p>
