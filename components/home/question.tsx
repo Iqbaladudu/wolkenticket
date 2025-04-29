@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -25,6 +25,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { motion, useInView, AnimatePresence, Variants } from "framer-motion";
+import Script from 'next/script'; // Import Script for JSON-LD
 
 // Define types
 interface FaqQuestion {
@@ -169,440 +170,270 @@ const processQuestions = (): {
 
 const { allQuestions, popularQuestions } = processQuestions();
 
-export default function FAQ() {
-  const [activeCategory, setActiveCategory] = useState<string>("booking");
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
-    {},
+// Function to generate JSON-LD schema
+const generateFaqSchema = (categories: FaqCategory[]) => {
+  const mainEntity = categories.flatMap(category =>
+    category.questions.map(q => ({
+      "@type": "Question",
+      "name": q.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": q.answer
+      }
+    }))
   );
-  const sectionRef = useRef<HTMLElement>(null);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity,
+  };
+};
+
+
+export default function QnA() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("booking");
+  const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  // Handle search
-  const handleSearch = (query: string): void => {
-    setSearchQuery(query);
-    if (query.trim() === "") {
-      setSearchResults([]);
-      return;
-    }
+  // Generate JSON-LD schema data
+  const faqSchema = useMemo(() => generateFaqSchema(faqCategories), [faqCategories]);
 
-    const results = allQuestions.filter(
-      (q) =>
-        q.question.toLowerCase().includes(query.toLowerCase()) ||
-        q.answer.toLowerCase().includes(query.toLowerCase()),
-    );
-    setSearchResults(results);
-  };
+
+  // Filter logic
+  const filteredQuestions = useMemo(() => {
+    if (!searchTerm.trim()) return [];
+
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    const results: SearchResult[] = [];
+
+    faqCategories.forEach((category) => {
+      category.questions.forEach((q, index) => {
+        if (
+          q.question.toLowerCase().includes(lowerSearchTerm) ||
+          q.answer.toLowerCase().includes(lowerSearchTerm)
+        ) {
+          results.push({
+            ...q,
+            category: category.id,
+            categoryLabel: category.label,
+            idx: index, // Keep original index if needed
+          });
+        }
+      });
+    });
+    return results;
+  }, [searchTerm, faqCategories]);
 
   // Animation variants
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.05 } },
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        damping: 15,
-        stiffness: 70,
-      },
-    },
-  };
-
-  const pulseVariants: Variants = {
-    pulse: {
-      scale: [1, 1.05, 1],
-      opacity: [0.7, 1, 0.7],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } },
+    exit: { opacity: 0, y: -15 },
   };
 
   return (
-    <section
-      className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-gray-50 to-white text-gray-900 relative overflow-hidden"
-      ref={sectionRef}
-    >
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(5)].map((_, i) => (
+    <>
+      {/* Add JSON-LD Schema */}
+      <Script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <section // Use section tag
+        id="faq" // Add ID for internal linking
+        className="py-24 bg-white relative overflow-hidden"
+        ref={sectionRef}
+        aria-labelledby="faq-heading" // Add aria-label
+      >
+        {/* Background elements */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-blue-100/30 to-transparent rounded-full filter blur-[100px] opacity-40"></div>
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-purple-100/30 to-transparent rounded-full filter blur-[100px] opacity-30"></div>
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center space-x-1 bg-blue-50 px-3 py-1 rounded-full mb-4 shadow-sm"
+            >
+              <HelpCircle className="h-3.5 w-3.5 text-blue-600 mr-1" aria-hidden="true" />
+              <span className="text-sm font-medium text-blue-700">
+                Need Help?
+              </span>
+            </motion.div>
+
+            <motion.h2 // Use h2 for section heading
+              id="faq-heading" // ID for aria-labelledby
+              className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900"
+              initial={{ opacity: 0, y: -20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.1 }}
+            >
+              Frequently Asked Questions
+            </motion.h2>
+
+            <motion.p
+              className="text-lg text-gray-600 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              Find answers to common questions about booking, payments, and our
+              services.
+            </motion.p>
+          </div>
+
+          {/* Search Bar */}
           <motion.div
-            key={i}
-            className="absolute opacity-15"
-            style={{
-              top: `${Math.random() * 90}%`,
-              left: `${Math.random() * 90}%`,
-              scale: 0.5 + Math.random() * 1.5,
-            }}
-            animate={{
-              y: [0, -15, 0],
-              opacity: [0.15, 0.25, 0.15],
-              rotate: [0, i % 2 === 0 ? 10 : -10, 0],
-            }}
-            transition={{
-              duration: 5 + Math.random() * 5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: Math.random() * 2,
-            }}
-          >
-            <HelpCircle className="h-8 w-8 sm:h-10 sm:w-10 text-blue-300" />
-          </motion.div>
-        ))}
-
-        {/* Gradient orbs */}
-        <div className="absolute -bottom-20 -right-20 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-gradient-to-r from-blue-100/30 to-purple-100/30 rounded-full filter blur-[80px] md:blur-[100px] opacity-30" />
-        <div className="absolute top-40 -left-20 w-60 sm:w-72 md:w-80 h-60 sm:h-72 md:h-80 bg-gradient-to-r from-amber-100/30 to-blue-100/30 rounded-full filter blur-[80px] md:blur-[100px] opacity-30" />
-      </div>
-
-      {/* Main content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-10 sm:mb-12 md:mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center space-x-1 bg-blue-50 px-2 sm:px-3 py-1 rounded-full mb-3 sm:mb-4 shadow-sm"
-          >
-            <HelpCircle className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-blue-600 mr-1" />
-            <span className="text-xs sm:text-sm font-medium text-blue-700">
-              Help Center
-            </span>
-          </motion.div>
-
-          <motion.h2
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900"
-            initial={{ opacity: 0, y: -20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            Frequently Asked Questions
-          </motion.h2>
-
-          <motion.p
-            className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Find answers to common questions about our services, booking
-            process, and policies. Can&apos;t find what you&apos;re looking for?
-            Contact our support team.
-          </motion.p>
-
-          {/* Search Box */}
-          <motion.div
-            className="max-w-md sm:max-w-lg md:max-w-xl mx-auto mb-8 sm:mb-10 md:mb-12"
+            className="mb-12 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 type="text"
-                placeholder="Search for answers..."
-                className="pl-10 py-5 sm:py-6 rounded-full border-gray-200 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
+                placeholder="Search questions..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-4 py-3 text-base border-gray-200 focus:border-blue-500 focus:ring-blue-200"
+                aria-label="Search frequently asked questions"
               />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" aria-hidden="true" />
             </div>
+          </motion.div>
 
-            {/* Search Results */}
-            <AnimatePresence>
-              {searchResults.length > 0 && (
+          {/* Tabs and Accordion */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <AnimatePresence mode="wait">
+              {searchTerm.trim() ? (
+                // Search Results View
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mt-2 bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden"
+                  key="search-results"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="space-y-4"
                 >
-                  <div className="p-3 sm:p-4 border-b border-gray-100 bg-gray-50">
-                    <p className="text-xs sm:text-sm font-medium text-gray-500">
-                      {searchResults.length} result
-                      {searchResults.length !== 1 ? "s" : ""} found
-                    </p>
-                  </div>
-                  <div className="max-h-60 sm:max-h-80 overflow-y-auto">
-                    {searchResults.map((result, idx) => (
-                      <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.05 }}
-                        className="p-3 sm:p-4 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
-                      >
-                        <div className="flex items-start gap-2 sm:gap-3">
-                          <Badge
-                            variant="outline"
-                            className="mt-1 whitespace-nowrap text-xs"
-                          >
-                            {result.categoryLabel}
-                          </Badge>
-                          <div>
-                            <h4 className="font-medium text-sm sm:text-base text-gray-900 mb-1">
-                              {result.question}
-                            </h4>
-                            <p className="text-xs sm:text-sm text-gray-600 line-clamp-2">
-                              {result.answer}
-                            </p>
-                          </div>
-                        </div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-4">Search Results for "{searchTerm}"</h3>
+                  {filteredQuestions.length > 0 ? (
+                    filteredQuestions.map((q, index) => (
+                      <motion.div key={`search-${index}`} variants={itemVariants}>
+                        <Card className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                          <CardContent className="p-4">
+                            <div className="flex justify-between items-center mb-2">
+                              <Badge variant="secondary">{q.categoryLabel}</Badge>
+                            </div>
+                            <h4 className="font-medium text-gray-800 mb-1">{q.question}</h4>
+                            <p className="text-sm text-gray-600">{q.answer}</p>
+                          </CardContent>
+                        </Card>
                       </motion.div>
+                    ))
+                  ) : (
+                    <motion.p variants={itemVariants} className="text-gray-500 text-center py-8">
+                      No questions found matching your search. Try different keywords or browse the categories below.
+                    </motion.p>
+                  )}
+                </motion.div>
+              ) : (
+                // Tabbed View
+                <motion.div
+                  key="tabs-view"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Tabs
+                    value={activeTab}
+                    onValueChange={setActiveTab}
+                    className="w-full"
+                  >
+                    <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8">
+                      {faqCategories.map((category) => (
+                        <TabsTrigger
+                          key={category.id}
+                          value={category.id}
+                          className="data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700 data-[state=active]:shadow-none flex items-center gap-2"
+                        >
+                          {category.icon}
+                          {category.label}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+
+                    {faqCategories.map((category) => (
+                      <TabsContent key={category.id} value={category.id} className="mt-0">
+                        <Accordion type="single" collapsible className="w-full space-y-3">
+                          {category.questions.map((q, index) => (
+                            <AccordionItem
+                              key={`${category.id}-${index}`}
+                              value={`item-${index}`}
+                              className="border border-gray-100 rounded-lg bg-white shadow-sm data-[state=open]:shadow-md transition-shadow"
+                            >
+                              <AccordionTrigger className="px-4 py-3 text-left font-medium hover:no-underline">
+                                {q.question}
+                                {q.popular && (
+                                  <Badge variant="outline" className="ml-2 bg-amber-50 text-amber-700 border-amber-200">Popular</Badge>
+                                )}
+                              </AccordionTrigger>
+                              <AccordionContent className="px-4 pb-4 pt-0 text-gray-600">
+                                {q.answer}
+                              </AccordionContent>
+                            </AccordionItem>
+                          ))}
+                        </Accordion>
+                      </TabsContent>
                     ))}
-                  </div>
+                  </Tabs>
                 </motion.div>
               )}
             </AnimatePresence>
           </motion.div>
-        </div>
 
-        {/* FAQ Categories and Content */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <Tabs
-            defaultValue="booking"
-            value={searchQuery ? "search" : activeCategory}
-            onValueChange={setActiveCategory}
-            className="w-full"
+          {/* Contact Support Section */}
+          <motion.div
+            className="mt-16 text-center bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-xl border border-blue-100"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <TabsList className="flex flex-wrap mb-5 bg-white">
-              {faqCategories.map((category) => (
-                <TabsTrigger
-                  key={category.id}
-                  value={category.id}
-                  className="data-[state=active]:text-blue-700 py-2 text-xs sm:text-sm w-auto"
-                  onClick={() => setSearchQuery("")}
-                >
-                  <span className="flex items-center">
-                    <span className="mr-1 sm:mr-2 text-blue-600">
-                      {category.icon}
-                    </span>
-                    <span className="hidden xs:inline">{category.label}</span>
-                    <span className="xs:hidden">
-                      {category.label.split(" ")[0]}
-                    </span>
-                  </span>
-                </TabsTrigger>
-              ))}
-
-              {/* Additional tab for search results */}
-              <TabsTrigger
-                value="search"
-                className="hidden" // Hide this trigger as it's only for programmatic use
-              />
-            </TabsList>
-
-            {/* Search Results Content */}
-            <TabsContent value="search">
-              {searchResults.length > 0 ? (
-                <motion.div variants={containerVariants}>
-                  <Accordion
-                    type="multiple"
-                    className="space-y-3 sm:space-y-4"
-                    value={Object.keys(expandedItems).filter(
-                      (key) => expandedItems[key],
-                    )}
-                    onValueChange={(value) => {
-                      const newExpandedItems: Record<string, boolean> = {};
-                      value.forEach((v) => (newExpandedItems[v] = true));
-                      setExpandedItems(newExpandedItems);
-                    }}
-                  >
-                    {searchResults.map((faq, index) => (
-                      <motion.div
-                        key={`search-${index}`}
-                        variants={itemVariants}
-                        custom={index}
-                      >
-                        <AccordionItem
-                          value={`search-${index}`}
-                          className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden"
-                        >
-                          <AccordionTrigger className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 text-left text-gray-800 hover:bg-blue-50 group">
-                            <div className="flex items-center gap-2 sm:gap-3">
-                              <Badge
-                                variant="outline"
-                                className="whitespace-nowrap text-xs hidden sm:inline-flex"
-                              >
-                                {faq.categoryLabel}
-                              </Badge>
-                              <span className="font-medium text-sm sm:text-base">
-                                {faq.question}
-                              </span>
-                              {faq.popular && (
-                                <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-200 ml-auto text-xs">
-                                  Popular
-                                </Badge>
-                              )}
-                            </div>
-                            <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500 transition-transform duration-300 group-data-[state=open]:rotate-180 flex-shrink-0" />
-                          </AccordionTrigger>
-                          <AccordionContent className="px-4 sm:px-6 py-3 sm:py-4 text-gray-600 bg-gray-50 border-t border-gray-100 text-sm">
-                            <p>{faq.answer}</p>
-                            <div className="flex justify-end mt-3">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 h-8"
-                              >
-                                <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                                <span className="text-xs">
-                                  Was this helpful?
-                                </span>
-                              </Button>
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
-                      </motion.div>
-                    ))}
-                  </Accordion>
-                </motion.div>
-              ) : (
-                <motion.div
-                  variants={itemVariants}
-                  className="text-center py-8 sm:py-12 px-4 bg-gray-50 rounded-lg border border-gray-200"
-                >
-                  <HelpCircle className="h-8 w-8 sm:h-12 sm:w-12 text-gray-300 mx-auto mb-3 sm:mb-4" />
-                  <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-1">
-                    No results found
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-4 sm:mb-6">
-                    Try a different search term or browse by category
-                  </p>
-                  <Button
-                    onClick={() => setSearchQuery("")}
-                    variant="outline"
-                    className="border-blue-200 text-blue-700 hover:bg-blue-50 text-sm h-9 sm:h-10"
-                  >
-                    Clear search
-                  </Button>
-                </motion.div>
-              )}
-            </TabsContent>
-
-            {/* Regular Category Contents */}
-            {faqCategories.map((category) => (
-              <TabsContent key={category.id} value={category.id}>
-                <motion.div variants={containerVariants}>
-                  <Accordion
-                    type="multiple"
-                    className="space-y-3 sm:space-y-4"
-                    value={Object.keys(expandedItems).filter(
-                      (key) => expandedItems[key],
-                    )}
-                    onValueChange={(value) => {
-                      const newExpandedItems: Record<string, boolean> = {};
-                      value.forEach((v) => (newExpandedItems[v] = true));
-                      setExpandedItems(newExpandedItems);
-                    }}
-                  >
-                    {category.questions.map((faq, index) => (
-                      <motion.div
-                        key={`${category.id}-${index}`}
-                        variants={itemVariants}
-                        custom={index}
-                        whileHover={{
-                          scale: 1.01,
-                          transition: { duration: 0.2 },
-                        }}
-                      >
-                        <AccordionItem
-                          value={`${category.id}-${index}`}
-                          className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"
-                        >
-                          <AccordionTrigger className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 text-left text-gray-800 hover:bg-blue-50 group">
-                            <div className="flex items-center gap-2 sm:gap-3">
-                              <motion.div
-                                variants={pulseVariants}
-                                animate="pulse"
-                                className="bg-blue-100 p-1.5 sm:p-2 rounded-full"
-                              >
-                                <HelpCircle className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
-                              </motion.div>
-                              <span className="font-medium text-sm sm:text-base">
-                                {faq.question}
-                              </span>
-                              {faq.popular && (
-                                <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-200 ml-auto text-xs">
-                                  Popular
-                                </Badge>
-                              )}
-                            </div>
-                          </AccordionTrigger>
-                          <AccordionContent className="px-4 sm:px-6 py-3 sm:py-4 text-gray-600 bg-gray-50 border-t border-gray-100 text-xs sm:text-sm">
-                            <p>{faq.answer}</p>
-                            <div className="flex justify-end mt-2 sm:mt-3">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 h-7 sm:h-8"
-                              >
-                                <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                                <span className="text-xs">
-                                  Was this helpful?
-                                </span>
-                              </Button>
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
-                      </motion.div>
-                    ))}
-                  </Accordion>
-                </motion.div>
-              </TabsContent>
-            ))}
-          </Tabs>
-        </motion.div>
-
-        {/* Popular Questions Quick Access */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-10 sm:mt-12 md:mt-16"
-        >
-          <div className="border-t border-gray-200 pt-6 sm:pt-8">
-            <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-gray-900">
-              Popular Questions
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-              {popularQuestions.slice(0, 4).map((q, idx) => (
-                <Button
-                  key={idx}
-                  variant="outline"
-                  className="justify-start py-3 sm:py-6 px-3 sm:px-4 border-gray-200 hover:border-blue-200 hover:bg-blue-50 text-left flex items-start group h-auto"
-                  onClick={() => {
-                    setActiveCategory(q.category);
-                    setExpandedItems({ [`${q.category}-${q.idx}`]: true });
-                    setSearchQuery("");
-                  }}
-                >
-                  <HelpCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 mr-2 sm:mr-3 flex-shrink-0 mt-0.5" />
-                  <span className="font-normal text-xs sm:text-sm text-gray-700 group-hover:text-blue-700">
-                    {q.question}
-                  </span>
-                  <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-blue-500 flex-shrink-0" />
-                </Button>
-              ))}
+            <h3 className="text-2xl font-bold mb-4 text-gray-900">Can't find an answer?</h3>
+            <p className="text-gray-600 mb-6 max-w-lg mx-auto">
+              Our support team is ready to help you 24/7. Reach out via email or phone for personalized assistance.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+              <Button asChild className="group bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-3 shadow-md hover:shadow-lg transition-all duration-300">
+                <a href="/contact">
+                  Contact Support <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </a>
+              </Button>
+              <div className="flex items-center gap-4 text-sm text-gray-700">
+                <a href="mailto:support@wolkenticket.com" className="flex items-center gap-1 hover:text-blue-600">
+                  <Mail className="h-4 w-4" aria-hidden="true" /> Email Us
+                </a>
+                <a href="tel:+6281364791810" className="flex items-center gap-1 hover:text-blue-600">
+                  <Phone className="h-4 w-4" aria-hidden="true" /> Call Us
+                </a>
+              </div>
             </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
+          </motion.div>
+        </div>
+      </section>
+    </>
   );
 }

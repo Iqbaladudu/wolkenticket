@@ -27,7 +27,6 @@ import { cn } from "@/lib/utils";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeNavItem, setActiveNavItem] = useState("flight");
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
@@ -56,48 +55,50 @@ export default function Navbar() {
             </Link>
           </motion.div>
 
-          {/* User Actions */}
+          {/* Desktop Navigation & User Actions */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}
             className="flex items-center space-x-2"
           >
-            <Button
-              variant="ghost"
-              size="sm"
-              asChild
-              className="hidden md:inline-flex items-center rounded-full text-sm font-medium transition-colors hover:bg-blue-50 hover:text-blue-600"
-            >
-              <Link href={"/view-booking"}>
-                <Tickets className="mr-2 h-4 w-4" />
-                <span>View booking</span>
-              </Link>
-            </Button>
+            {/* Use nav for primary navigation links */}
+            <nav className="hidden md:flex items-center space-x-1" aria-label="Main navigation">
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className="items-center rounded-full text-sm font-medium transition-colors hover:bg-blue-50 hover:text-blue-600"
+              >
+                <Link href={"/view-booking"}>
+                  <Tickets className="mr-2 h-4 w-4" aria-hidden="true" />
+                  <span>View booking</span>
+                </Link>
+              </Button>
 
-            <Button
-              variant="ghost"
-              size="sm"
-              asChild
-              className="hidden md:inline-flex items-center rounded-full text-sm font-medium transition-colors hover:bg-blue-50 hover:text-blue-600"
-            >
-              <Link href={"/contact"}>
-                <Headphones className="mr-2 h-4 w-4" />
-                <span>Contact us</span>
-              </Link>
-            </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className="items-center rounded-full text-sm font-medium transition-colors hover:bg-blue-50 hover:text-blue-600"
+              >
+                <Link href={"/contact"}>
+                  <Headphones className="mr-2 h-4 w-4" aria-hidden="true" />
+                  <span>Contact us</span>
+                </Link>
+              </Button>
+            </nav>
 
             <Button
               size="lg"
+              asChild // Use asChild to allow Link to control navigation
               className="hidden md:inline-flex items-center rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm transition-all duration-300 hover:shadow-md hover:translate-y-[-1px]"
             >
               <Link href={"/checkout"} className="md:inline-flex items-center">
-                <Search className="mr-2 h-4 w-4" />
+                <Search className="mr-2 h-4 w-4" aria-hidden="true" />
                 <span>Book now</span>
               </Link>
             </Button>
-
-            {/* Services Dropdown (Tablets) */}
 
             {/* Mobile menu button */}
             <Button
@@ -137,12 +138,14 @@ export default function Navbar() {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <nav className="py-4 px-4">
+            {/* Use nav for mobile navigation */}
+            <nav className="py-4 px-4" aria-label="Mobile navigation">
               <ul className="">
                 <li>
                   <MobileNavItem
                     href="/view-booking"
-                    icon={<Tickets className="h-4 w-4" />}
+                    icon={<Tickets className="h-4 w-4" aria-hidden="true" />}
+                    onClick={() => setIsMenuOpen(false)} // Close menu on click
                   >
                     View booking
                   </MobileNavItem>
@@ -150,7 +153,8 @@ export default function Navbar() {
                 <li>
                   <MobileNavItem
                     href="/contact"
-                    icon={<Headphones className="h-4 w-4" />}
+                    icon={<Headphones className="h-4 w-4" aria-hidden="true" />}
+                    onClick={() => setIsMenuOpen(false)} // Close menu on click
                   >
                     Contact
                   </MobileNavItem>
@@ -161,7 +165,7 @@ export default function Navbar() {
                     className="mt-4 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:shadow-md"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Search className="mr-2 h-4 w-4" />
+                    <Search className="mr-2 h-4 w-4" aria-hidden="true" />
                     Book now
                   </Link>
                 </li>
@@ -174,61 +178,14 @@ export default function Navbar() {
   );
 }
 
-function NavItem({
-  href,
-  icon,
-  active,
-  children,
-  onClick,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  active?: boolean;
-  children: React.ReactNode;
-  onClick?: () => void;
-}) {
-  return (
-    <Link
-      href={href}
-      className={cn(
-        "group flex items-center space-x-1 rounded-full px-3 py-2 text-sm font-medium transition-all duration-200",
-        active
-          ? "bg-blue-50 text-blue-600"
-          : "text-muted-foreground hover:bg-gray-100 hover:text-gray-900",
-      )}
-      onClick={onClick}
-    >
-      <motion.span
-        whileHover={{ scale: 1.15 }}
-        className={cn(
-          "transition-colors duration-200",
-          active ? "text-blue-600" : "",
-        )}
-      >
-        {icon}
-      </motion.span>
-      <span>{children}</span>
-      {active && (
-        <motion.span
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="ml-1 h-1.5 w-1.5 rounded-full bg-blue-500"
-        />
-      )}
-    </Link>
-  );
-}
-
 function MobileNavItem({
   href,
   icon,
-  active,
   children,
   onClick,
 }: {
   href: string;
   icon: React.ReactNode;
-  active?: boolean;
   children: React.ReactNode;
   onClick?: () => void;
 }) {
@@ -237,21 +194,12 @@ function MobileNavItem({
       href={href}
       className={cn(
         "flex items-center space-x-3 rounded-lg px-3 py-2.5 text-base font-medium transition-colors",
-        active
-          ? "bg-blue-50 text-blue-600"
-          : "text-muted-foreground hover:bg-gray-100 hover:text-gray-900",
+        "text-muted-foreground hover:bg-gray-100 hover:text-gray-900",
       )}
       onClick={onClick}
     >
-      <span className={active ? "text-blue-600" : ""}>{icon}</span>
+      <span>{icon}</span> {/* Icon styling simplified */}
       <span>{children}</span>
-      {active && (
-        <motion.span
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="ml-auto h-2 w-2 rounded-full bg-blue-500"
-        />
-      )}
     </Link>
   );
 }

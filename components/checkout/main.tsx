@@ -23,8 +23,8 @@ import Navbar from "../navbar";
 // Animation variants
 export const pageVariants = {
   hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: 20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeInOut" } }, // Added transition
+  exit: { opacity: 0, x: 20, transition: { duration: 0.3, ease: "easeInOut" } }, // Added transition
 };
 
 export type FormValues = z.infer<typeof formSchema>;
@@ -153,12 +153,12 @@ export default function MultiStepBookingForm() {
             transition={{ duration: 0.5 }}
             className="text-center mb-8"
           >
+            {/* Use H1 for the main page title */}
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-              Book Your Journey
+              Book Your Flight Reservation
             </h1>
             <p className="text-gray-600 max-w-md mx-auto">
-              Find the perfect flight for your next adventure with our easy
-              booking process.
+              Complete the steps below to get your verified flight document instantly.
             </p>
           </motion.div>
 
@@ -170,14 +170,14 @@ export default function MultiStepBookingForm() {
                 <form className="space-y-8">
                   <AnimatePresence mode="wait">
                     {step === 1 && (
-                      <TravelDetails form={form} airportsData={airports} />
+                      <TravelDetails key="step1" form={form} airportsData={airports} />
                     )}
-                    {step === 2 && <PassengerInfo form={form} />}
-                    {step === 3 && <CheckoutOptions form={form} />}
+                    {step === 2 && <PassengerInfo key="step2" form={form} />}
+                    {step === 3 && <CheckoutOptions key="step3" form={form} />}
                   </AnimatePresence>
 
                   <motion.div
-                    className="flex justify-between mt-10 pt-6 border-t border-gray-100"
+                    className="flex justify-between items-center mt-10 pt-6 border-t border-gray-100" // Added items-center
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
@@ -187,23 +187,24 @@ export default function MultiStepBookingForm() {
                         type="button"
                         variant="outline"
                         onClick={handleBack}
-                        className="flex items-center gap-2 border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-all duration-300"
+                        className="flex items-center gap-2 border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-all duration-300 rounded-full px-5 py-2.5" // Style adjustments
                       >
                         <ChevronLeft className="h-4 w-4" /> Back
                       </Button>
                     ) : (
-                      <div></div>
+                      // Keep space consistent even if button isn't there
+                      <div aria-hidden="true" />
                     )}
 
                     {step !== totalSteps ? (
                       <Button
                         type="button"
                         onClick={handleNext}
-                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-300"
+                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-300 rounded-full px-5 py-2.5" // Style adjustments
                       >
                         Continue <ChevronRight className="h-4 w-4" />
                       </Button>
-                    ) : null}
+                    ) : null} {/* Submit button is handled within CheckoutOptions */}
                   </motion.div>
                 </form>
               </Form>

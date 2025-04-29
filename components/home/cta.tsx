@@ -127,9 +127,10 @@ const CallToActionWithPartners: React.FC = () => {
   };
 
   return (
-    <section
+    <section // Use section tag
       className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white to-gray-50 text-gray-900 relative overflow-hidden"
       ref={sectionRef}
+      aria-labelledby="cta-heading" // Add aria-label
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -216,22 +217,15 @@ const CallToActionWithPartners: React.FC = () => {
                     Limited Time Offer
                   </Badge>
 
-                  <motion.h2
+                  <motion.h2 // Use h2 for main CTA heading
+                    id="cta-heading" // ID for aria-labelledby
                     className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight"
                     initial={{ opacity: 0, x: -20 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
                     transition={{ duration: 0.6, delay: 0.2 }}
                   >
-                    Get Your Travel Document Now — Only $8
-                    <span className="relative">
-                      <motion.span
-                        className="absolute bottom-1 left-0 right-0 h-2 md:h-3 bg-white/20 -z-0 rounded-sm"
-                        initial={{ width: 0 }}
-                        animate={isInView ? { width: "100%" } : {}}
-                        transition={{ duration: 0.8, delay: 0.6 }}
-                      />
-                    </span>
-                    ?
+                    Get Your Verified Travel Document Now — Only $8
+                    {/* Removed stray '?' */}
                   </motion.h2>
 
                   <motion.p
@@ -242,7 +236,7 @@ const CallToActionWithPartners: React.FC = () => {
                   >
                     Book your verified flight reservation in minutes and soar to
                     your next adventure! Our seamless process ensures you get
-                    what you need for your visa application.
+                    what you need for your visa application, fast and affordably.
                   </motion.p>
 
                   <motion.div
@@ -251,9 +245,11 @@ const CallToActionWithPartners: React.FC = () => {
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6, delay: 0.4 }}
                   >
-                    <Button className="group bg-white text-blue-700 hover:bg-blue-50 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 h-auto">
-                      <Link href="/checkout"> Book Now</Link>
-                      <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                    <Button asChild className="group bg-white text-blue-700 hover:bg-blue-50 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 h-auto px-6 py-3 sm:px-8 sm:py-4">
+                      <Link href="/checkout">
+                        Book Now
+                        <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+                      </Link>
                     </Button>
                   </motion.div>
                 </div>
@@ -339,6 +335,7 @@ const CallToActionWithPartners: React.FC = () => {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto mb-16 sm:mb-20"
+          aria-label="Key Benefits" // Add aria-label
         >
           {benefits.map((benefit, index) => (
             <motion.div
@@ -349,8 +346,9 @@ const CallToActionWithPartners: React.FC = () => {
               <Card className="h-full border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
                 <CardContent className="p-4 sm:p-6 flex flex-col h-full">
                   <div className="bg-blue-50 p-2 sm:p-3 rounded-lg w-fit mb-3 sm:mb-4">
-                    {benefit.icon}
+                    {React.cloneElement(benefit.icon as React.ReactElement, { 'aria-hidden': true })} {/* Add aria-hidden */}
                   </div>
+                  {/* Use h3 for benefit titles */}
                   <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2 text-gray-900">
                     {benefit.title}
                   </h3>
@@ -369,9 +367,11 @@ const CallToActionWithPartners: React.FC = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 1, delay: 0.2 }}
           className="text-center mb-6 sm:mb-8"
+          aria-labelledby="cta-partners-heading" // Add aria-label
         >
           <Badge className="mb-2 sm:mb-3">Official Partners</Badge>
-          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+          {/* Use h3 for subsection heading */}
+          <h3 id="cta-partners-heading" className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
             Our Trusted Airline Partners
           </h3>
           <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8">
@@ -400,17 +400,20 @@ const CallToActionWithPartners: React.FC = () => {
                 className="relative"
               >
                 <Card className="h-full border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-blue-100 group">
-                  <CardContent className="p-4 sm:p-6 flex flex-col items-center">
-                    <div className="h-10 sm:h-12 flex items-center justify-center mb-3 sm:mb-4 relative">
+                  <CardContent className="p-4 sm:p-6 flex flex-col items-center text-center"> {/* Added text-center */}
+                    <div className="h-10 sm:h-12 flex items-center justify-center mb-3 sm:mb-4 relative w-full"> {/* Ensure container takes width */}
                       <Image
                         height={48}
-                        width={120}
+                        width={120} // Adjust width if needed
                         src={partner.logo}
-                        alt={`${partner.name} logo`}
+                        // Add descriptive alt text
+                        alt={`${partner.name} logo - Wolkenticket partner`}
                         className="h-8 sm:h-10 w-auto object-contain transition-all duration-300 grayscale group-hover:grayscale-0"
+                        style={{ maxWidth: '120px' }} // Ensure image doesn't overflow
                       />
                     </div>
 
+                    {/* Use h4 for partner names */}
                     <h4 className="font-medium text-sm sm:text-base text-gray-800">
                       {partner.name}
                     </h4>
@@ -438,19 +441,19 @@ const CallToActionWithPartners: React.FC = () => {
           className="flex flex-wrap justify-center items-center gap-x-4 sm:gap-x-8 md:gap-x-12 gap-y-3 sm:gap-y-4 text-xs sm:text-sm text-gray-500 mt-10 sm:mt-16 pt-6 sm:pt-8 border-t border-gray-100"
         >
           <div className="flex items-center">
-            <Shield className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-green-500" />
+            <Shield className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-green-500" aria-hidden="true" />
             <span>SSL Secured Booking</span>
           </div>
           <div className="flex items-center">
-            <Clock className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-green-500" />
+            <Clock className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-green-500" aria-hidden="true" />
             <span>5-Minute Process</span>
           </div>
           <div className="flex items-center">
-            <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-green-500" />
+            <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-green-500" aria-hidden="true" />
             <span>Visa Application Ready</span>
           </div>
           <div className="flex items-center">
-            <Globe className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-green-500" />
+            <Globe className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-green-500" aria-hidden="true" />
             <span>190+ Countries Covered</span>
           </div>
         </motion.div>

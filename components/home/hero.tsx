@@ -9,7 +9,8 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-purple-50 text-gray-900 relative overflow-hidden">
+      {/* Use section for semantic structure */}
+      <section className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-purple-50 text-gray-900 relative overflow-hidden flex items-center">
         {/* Decorative elements with animations */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div
@@ -36,7 +37,7 @@ export default function Hero() {
         </div>
 
         {/* Main content */}
-        <div className="container mx-auto px-4 h-screen flex flex-col justify-center relative z-10">
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
             className="flex items-center space-x-3 mb-8"
             initial={{ opacity: 0, x: -30 }}
@@ -52,6 +53,7 @@ export default function Hero() {
             </span>
           </motion.div>
 
+          {/* Ensure this is the only H1 on the page */}
           <motion.h1
             className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
             initial={{ opacity: 0, y: 30 }}
@@ -68,8 +70,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
           >
-            Get Verified Flight Reservations In Minutes! Fast, Easy, Reliable &
-            Surprisingly Affordable Starting At Just $8
+            Fast, Easy, Reliable & Surprisingly Affordable Verified Flight Reservations Starting At Just $8. Perfect for Visa Applications.
           </motion.p>
 
           <motion.div
@@ -118,7 +119,7 @@ export default function Hero() {
             ))}
           </motion.div>
         </div>
-      </div>
+      </section>
 
       {/* Enhanced background gradient effects */}
       <div className="absolute top-1/4 right-0 w-96 h-96 bg-gradient-to-r from-blue-300 to-indigo-300 rounded-full filter blur-[128px] opacity-20 animate-pulse"></div>

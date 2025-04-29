@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Facebook, Instagram, Twitter, Github, Mail } from "lucide-react";
+import { Facebook, Instagram, Twitter, Github, Mail, Copyright } from "lucide-react"; // Added Copyright
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link"; // Use NextLink for internal links if applicable
 
 interface FooterLinkGroupProps {
   title: string;
@@ -50,107 +51,81 @@ const SocialIcon: React.FC<SocialIconProps> = ({
   </a>
 );
 
+// Define Footer component
 const Footer: React.FC = () => {
-  const [email, setEmail] = React.useState<string>("");
+  const currentYear = new Date().getFullYear();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setEmail("");
-  };
+  const companyLinks = [
+    { label: "About Us", href: "/about" }, // Example internal link
+    { label: "Contact", href: "/contact" },
+    { label: "Terms of Service", href: "/terms" }, // Example page
+    { label: "Privacy Policy", href: "/privacy" }, // Example page
+  ];
+
+  const resourceLinks = [
+    { label: "FAQ", href: "/#faq" }, // Link to FAQ section on homepage
+    { label: "How it Works", href: "/#how-it-works" }, // Link to instructions section
+    { label: "Blog", href: "/blog" }, // Example blog page
+  ];
 
   return (
-    <footer className="w-full bg-background">
-      <div className="container px-4 py-8 md:py-12 lg:py-16 mx-auto">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-12">
-          {/* Company info and subscription */}
-          <div className="lg:col-span-5 space-y-4">
-            {/* <div className="space-y-2">
-              <h2 className="text-xl font-bold">Wolkenticket</h2>
-              <p className="text-sm text-muted-foreground max-w-sm">
-                WolkenTicket provides instant, secure dummy tickets trusted by
-                100++ travelers. Embassy-recognized documentation for smooth
-                visa applications and stress-free travel planning.
-              </p>
-            </div> */}
-
-            {/* <form
-              onSubmit={handleSubmit}
-              className="flex flex-col sm:flex-row gap-2 max-w-sm"
-            >
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="min-h-10"
-                required
-              />
-              <Button type="submit" className="sm:w-auto">
-                Subscribe
-              </Button>
-            </form> */}
+    <footer className="bg-gray-50 border-t border-gray-200 py-12"> {/* Use footer tag */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+          {/* Brand Info */}
+          <div className="space-y-4">
+             <Link href="/" className="flex items-center space-x-2">
+               {/* Assuming similar logo structure as navbar */}
+               <div className="relative h-9 w-9 overflow-hidden rounded-full bg-gradient-to-br from-blue-500 to-blue-700 shadow-md">
+                 {/* Replace with appropriate icon if Plane isn't right */}
+                 <Mail className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 transform text-white" />
+               </div>
+               <span className="text-xl font-bold tracking-tight text-foreground">
+                 Wolken
+                 <span className="bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                   Ticket
+                 </span>
+               </span>
+             </Link>
+             <p className="text-sm text-muted-foreground">
+               Your trusted partner for verified flight reservations. Fast, secure, and reliable service for visa applications worldwide.
+             </p>
           </div>
 
-          {/* Footer links */}
-          {/* <div className="lg:col-span-7">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
-              <FooterLinkGroup
-                title="Company"
-                links={[
-                  { label: "About Us", href: "/about" },
-                  { label: "Careers", href: "/careers" },
-                  { label: "Press", href: "/press" },
-                  { label: "Blog", href: "/blog" },
-                ]}
-              />
-              <FooterLinkGroup
-                title="Resources"
-                links={[
-                  { label: "Documentation", href: "/docs" },
-                  { label: "Help Center", href: "/help" },
-                  { label: "Tutorials", href: "/tutorials" },
-                  { label: "Community", href: "/community" },
-                ]}
-              />
-              <FooterLinkGroup
-                title="Legal"
-                links={[
-                  { label: "Privacy Policy", href: "/privacy" },
-                  { label: "Terms of Service", href: "/terms" },
-                  { label: "Cookie Policy", href: "/cookies" },
-                  { label: "Compliance", href: "/compliance" },
-                ]}
-              />
+          {/* Link Groups */}
+          <FooterLinkGroup title="Company" links={companyLinks} />
+          <FooterLinkGroup title="Resources" links={resourceLinks} />
+
+          {/* Social Links */}
+          <div className="space-y-3">
+            <h3 className="font-medium text-sm text-primary">Connect With Us</h3>
+            <div className="flex space-x-3">
+              <SocialIcon href="#" ariaLabel="Facebook">
+                <Facebook className="h-4 w-4" />
+              </SocialIcon>
+              <SocialIcon href="#" ariaLabel="Instagram">
+                <Instagram className="h-4 w-4" />
+              </SocialIcon>
+              <SocialIcon href="#" ariaLabel="Twitter">
+                <Twitter className="h-4 w-4" />
+              </SocialIcon>
+              <SocialIcon href="mailto:support@wolkenticket.com" ariaLabel="Email">
+                <Mail className="h-4 w-4" />
+              </SocialIcon>
             </div>
-          </div> */}
+          </div>
         </div>
 
         <Separator className="my-8" />
 
-        {/* Bottom footer */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="text-sm text-muted-foreground order-2 sm:order-1">
-            © {new Date().getFullYear()} Wolkenticket. All rights reserved.
-          </div>
-
-          <div className="flex space-x-2 order-1 sm:order-2">
-            <SocialIcon href="https://twitter.com" ariaLabel="Twitter">
-              <Twitter className="h-4 w-4" />
-            </SocialIcon>
-            <SocialIcon href="https://instagram.com" ariaLabel="Instagram">
-              <Instagram className="h-4 w-4" />
-            </SocialIcon>
-            <SocialIcon href="https://facebook.com" ariaLabel="Facebook">
-              <Facebook className="h-4 w-4" />
-            </SocialIcon>
-            <SocialIcon href="mailto:info@company.com" ariaLabel="Email">
-              <Mail className="h-4 w-4" />
-            </SocialIcon>
-          </div>
+        {/* Copyright */}
+        <div className="text-center text-sm text-muted-foreground flex items-center justify-center">
+          <Copyright className="h-4 w-4 mr-1.5" />
+          <span>{currentYear} WolkenTicket. All rights reserved.</span>
         </div>
       </div>
     </footer>
   );
 };
 
-export default Footer;
+export default Footer; // Export the main Footer component

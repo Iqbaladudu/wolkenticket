@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react"; // Import useState
 import {
   Card,
   CardContent,
@@ -31,8 +31,8 @@ const steps = [
     title: "Find Your Destination",
     description: "Where Are You Applying for a Visa? ✈️",
     detailedDescription:
-      "Select your departure and destination airports on our checkout page",
-    icon: <Search className="h-6 w-6 text-blue-600" />,
+      "Select your departure and destination airports on our checkout page.",
+    icon: <Search className="h-6 w-6 text-blue-600" aria-hidden="true" />, // Add aria-hidden
     gradient: "from-blue-50 to-blue-100",
     border: "border-blue-200",
     accent: "bg-blue-600",
@@ -44,8 +44,8 @@ const steps = [
     title: "Choose Your Date",
     description: "Pick a date that suits your schedule from our calendar.",
     detailedDescription:
-      "Select a suitable date and ensure you choose the correct date",
-    icon: <Calendar className="h-6 w-6 text-purple-600" />,
+      "Select a suitable date and ensure you choose the correct date.",
+    icon: <Calendar className="h-6 w-6 text-purple-600" aria-hidden="true" />, // Add aria-hidden
     gradient: "from-purple-50 to-purple-100",
     border: "border-purple-200",
     accent: "bg-purple-600",
@@ -58,7 +58,7 @@ const steps = [
     description: "Review your details and secure your reservation instantly.",
     detailedDescription:
       "Double-check all information, customize any add-ons you might need, and finalize your reservation with our secure payment system.",
-    icon: <CheckCircle className="h-6 w-6 text-emerald-600" />,
+    icon: <CheckCircle className="h-6 w-6 text-emerald-600" aria-hidden="true" />, // Add aria-hidden
     gradient: "from-emerald-50 to-emerald-100",
     border: "border-emerald-200",
     accent: "bg-emerald-600",
@@ -72,7 +72,7 @@ const steps = [
       "Get your verified flight reservation delivered to your email.",
     detailedDescription:
       "Within minutes, you'll receive a fully verified flight reservation in your inbox, ready to use for visa applications or travel planning.",
-    icon: <Mail className="h-6 w-6 text-amber-600" />,
+    icon: <Mail className="h-6 w-6 text-amber-600" aria-hidden="true" />, // Add aria-hidden
     gradient: "from-amber-50 to-amber-100",
     border: "border-amber-200",
     accent: "bg-amber-600",
@@ -84,7 +84,7 @@ const steps = [
 export default function BookingInstructions() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-  const [selectedTab, setSelectedTab] = React.useState("search");
+  const [selectedTab, setSelectedTab] = useState("search"); // Use useState
 
   // Animation variants
   const containerVariants = {
@@ -134,9 +134,11 @@ export default function BookingInstructions() {
   };
 
   return (
-    <section
+    <section // Use section tag
+      id="how-it-works" // Add ID for internal linking
       className="py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden"
       ref={sectionRef}
+      aria-labelledby="booking-instructions-heading" // Add aria-label
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -176,13 +178,14 @@ export default function BookingInstructions() {
             transition={{ duration: 0.6 }}
             className="inline-flex items-center space-x-1 bg-white px-3 py-1 rounded-full mb-4 shadow-sm"
           >
-            <Settings2 className="h-3.5 w-3.5 text-blue-600 mr-1 animate-spin-slow" />
+            <Settings2 className="h-3.5 w-3.5 text-blue-600 mr-1 animate-spin-slow" aria-hidden="true" />
             <span className="text-sm font-medium text-gray-800">
               Simple Process
             </span>
           </motion.div>
 
-          <motion.h2
+          <motion.h2 // Use h2 for section heading
+            id="booking-instructions-heading" // ID for aria-labelledby
             className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900"
             initial={{ opacity: 0, y: -30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -253,17 +256,17 @@ export default function BookingInstructions() {
             onValueChange={setSelectedTab}
             className="max-w-5xl mx-auto"
           >
-            <TabsList className="grid grid-cols-4 md:grid-cols-4 mb-8">
+            <TabsList className="grid grid-cols-2 sm:grid-cols-4 mb-8"> {/* Adjusted grid-cols for better small screen */}
               {steps.map((step) => (
                 <TabsTrigger
                   key={step.id}
                   value={step.id}
-                  className="data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700 data-[state=active]:shadow-none"
+                  className="data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700 data-[state=active]:shadow-none flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-2" // Adjusted padding and layout
                 >
                   <span className="flex items-center">
-                    <span className="mr-0 md:mr-2">{step.icon}</span>
-                    <span className="hidden sm:inline">{step.title}</span>
+                    {step.icon}
                   </span>
+                  <span className="text-xs sm:text-sm">{step.title}</span> {/* Adjusted text size */}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -284,8 +287,9 @@ export default function BookingInstructions() {
                       <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"></div>
 
                       <CardHeader className="pb-2">
-                        <div className="flex justify-between items-start">
-                          <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                          {/* Use h3 for step titles */}
+                          <CardTitle as="h3" className="text-2xl font-bold text-gray-800 flex items-center gap-3">
                             <div
                               className={`p-3 rounded-lg bg-white shadow-sm`}
                             >
@@ -295,9 +299,9 @@ export default function BookingInstructions() {
                           </CardTitle>
                           <Badge
                             variant="outline"
-                            className="bg-white/70 text-gray-700 font-normal gap-1"
+                            className="bg-white/70 text-gray-700 font-normal gap-1 self-start sm:self-center" // Adjust alignment
                           >
-                            <Clock className="h-3 w-3" />
+                            <Clock className="h-3 w-3" aria-hidden="true" />
                             {step.time}
                           </Badge>
                         </div>
@@ -310,46 +314,15 @@ export default function BookingInstructions() {
 
                         <div className="flex items-start gap-3 bg-white/60 backdrop-blur-sm p-4 rounded-lg border border-gray-100">
                           <div className="bg-amber-50 p-1.5 rounded-full text-amber-600">
-                            <svg
-                              width="15"
-                              height="15"
-                              viewBox="0 0 15 15"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M8 1.5C8 1.22386 7.77614 1 7.5 1C7.22386 1 7 1.22386 7 1.5V2C7 2.27614 7.22386 2.5 7.5 2.5C7.77614 2.5 8 2.27614 8 2V1.5ZM7.5 11.5C9.433 11.5 11 9.933 11 8C11 6.067 9.433 4.5 7.5 4.5C5.567 4.5 4 6.067 4 8C4 9.933 5.567 11.5 7.5 11.5ZM7.5 12.5C9.98528 12.5 12 10.4853 12 8C12 5.51472 9.98528 3.5 7.5 3.5C5.01472 3.5 3 5.51472 3 8C3 10.4853 5.01472 12.5 7.5 12.5ZM2 8C2 7.72386 1.77614 7.5 1.5 7.5C1.22386 7.5 1 7.72386 1 8C1 8.27614 1.22386 8.5 1.5 8.5C1.77614 8.5 2 8.27614 2 8ZM13.5 7.5C13.7761 7.5 14 7.72386 14 8C14 8.27614 13.7761 8.5 13.5 8.5C13.2239 8.5 13 8.27614 13 8C13 7.72386 13.2239 7.5 13.5 7.5ZM7.5 14C7.77614 14 8 13.7761 8 13.5C8 13.2239 7.77614 13 7.5 13C7.22386 13 7 13.2239 7 13.5C7 13.7761 7.22386 14 7.5 14ZM7.5 3C7.77614 3 8 2.77614 8 2.5C8 2.22386 7.77614 2 7.5 2C7.22386 2 7 2.22386 7 2.5C7 2.77614 7.22386 3 7.5 3ZM4.46967 4.46967C4.76256 4.17678 4.76256 3.70711 4.46967 3.41421C4.17678 3.12132 3.70711 3.12132 3.41421 3.41421C3.12132 3.70711 3.12132 4.17678 3.41421 4.46967C3.70711 4.76256 4.17678 4.76256 4.46967 4.46967ZM11.5303 11.5303C11.8232 11.2374 11.8232 10.7678 11.5303 10.4749C11.2374 10.182 10.7678 10.182 10.4749 10.4749C10.182 10.7678 10.182 11.2374 10.4749 11.5303C10.7678 11.8232 11.2374 11.8232 11.5303 11.5303ZM11.5303 4.46967C11.8232 4.76256 12.2929 4.76256 12.5858 4.46967C12.8787 4.17678 12.8787 3.70711 12.5858 3.41421C12.2929 3.12132 11.8232 3.12132 11.5303 3.41421C11.2374 3.70711 11.2374 4.17678 11.5303 4.46967ZM4.46967 11.5303C4.76256 11.8232 4.76256 12.2929 4.46967 12.5858C4.17678 12.8787 3.70711 12.8787 3.41421 12.5858C3.12132 12.2929 3.12132 11.8232 3.41421 11.5303C3.70711 11.2374 4.17678 11.2374 4.46967 11.5303Z"
-                                fill="currentColor"
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                              ></path>
-                            </svg>
+                             {/* Add an icon for the tip, e.g., Lightbulb */}
+                             {/* <Lightbulb className="h-4 w-4" /> */}
                           </div>
-                          <div className="text-sm text-gray-700">
-                            <span className="font-medium">Pro Tip:</span>{" "}
-                            {step.tip}
+                          <div>
+                            <p className="text-sm font-medium text-gray-800">Tip:</p>
+                            <p className="text-sm text-gray-600">{step.tip}</p>
                           </div>
                         </div>
                       </CardContent>
-
-                      <CardFooter className="pt-0 flex justify-end">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-gray-700 hover:text-blue-700 hover:bg-blue-50 gap-1"
-                          onClick={() => {
-                            const nextIndex =
-                              (steps.findIndex((s) => s.id === step.id) + 1) %
-                              steps.length;
-                            setSelectedTab(steps[nextIndex].id);
-                          }}
-                        >
-                          {step.id !== "receive"
-                            ? "Next Step"
-                            : "Start Process"}
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                      </CardFooter>
                     </Card>
                   </motion.div>
                 </AnimatePresence>
@@ -366,31 +339,19 @@ export default function BookingInstructions() {
           transition={{ duration: 0.8, delay: 0.6 }}
         >
           <div className="bg-white p-8 rounded-xl shadow-sm max-w-3xl mx-auto border border-gray-100">
+             {/* Use h3 for subsection heading */}
             <h3 className="text-2xl font-bold mb-4">Ready to get started?</h3>
             <p className="text-gray-600 mb-6">
               Book your verified flight reservation in minutes and receive your
               ticket instantly.
             </p>
-            <Button className="group bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-8 py-6 shadow-md hover:shadow-lg transition-all duration-300">
-              <span className="text-base">Start Booking Now</span>
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            <Button asChild className="group bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-8 py-3 shadow-md hover:shadow-lg transition-all duration-300">
+              {/* Link to checkout */}
+              <a href="/checkout">
+                Book Now
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </a>
             </Button>
-            <div className="flex items-center justify-center flex-wrap gap-8 mt-8">
-              <div className="flex flex-col items-center">
-                <div className="text-3xl font-bold text-blue-600">4+</div>
-                <div className="text-sm text-gray-500">Airlines</div>
-              </div>
-              <div className="h-10 w-px bg-gray-200"></div>
-              <div className="flex flex-col items-center">
-                <div className="text-3xl font-bold text-blue-600">2min</div>
-                <div className="text-sm text-gray-500">Process Time</div>
-              </div>
-              <div className="h-10 w-px bg-gray-200"></div>
-              <div className="flex flex-col items-center">
-                <div className="text-3xl font-bold text-blue-600">100%</div>
-                <div className="text-sm text-gray-500">Acceptance Rate</div>
-              </div>
-            </div>
           </div>
         </motion.div>
       </div>

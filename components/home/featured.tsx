@@ -34,7 +34,7 @@ const benefits = [
     description:
       "Book your verifiable dummy ticket in minutes through our secure platform with authentic airline partnerships.",
     gradient: "from-blue-50 to-indigo-100",
-    icon: <Shield className="h-6 w-6 text-blue-600" />,
+    icon: <Shield className="h-6 w-6 text-blue-600" aria-hidden="true" />, // Add aria-hidden
     highlight: "100% Secure",
     stat: "Stress-free privacy",
   },
@@ -43,7 +43,7 @@ const benefits = [
     description:
       "Access the most competitive rates for your dummy tickets. Found a better price elsewhere? We'll not just match it — we'll beat it by 5%.",
     gradient: "from-purple-50 to-pink-100",
-    icon: <CreditCard className="h-6 w-6 text-purple-600" />,
+    icon: <CreditCard className="h-6 w-6 text-purple-600" aria-hidden="true" />, // Add aria-hidden
     highlight: "Money Back Guaranteed",
     stat: "Save more for your next trip",
   },
@@ -52,7 +52,7 @@ const benefits = [
     description:
       "Never wait for help with our round-the-clock customer care. Get expert assistance from our dedicated team whenever you need it, wherever you are.",
     gradient: "from-teal-50 to-cyan-100",
-    icon: <Clock className="h-6 w-6 text-teal-600" />,
+    icon: <Clock className="h-6 w-6 text-teal-600" aria-hidden="true" />, // Add aria-hidden
     highlight: "Always at Your Service",
     stat: "<15min response time",
   },
@@ -65,14 +65,14 @@ const additionalFeatures = [
     description:
       "Your verified tickets delivered to your inbox in 10-30 minutes — guaranteed. If we're late, your next booking is completely free",
     gradient: "from-amber-50 to-orange-100",
-    icon: <Zap className="h-6 w-6 text-amber-600" />,
+    icon: <Zap className="h-6 w-6 text-amber-600" aria-hidden="true" />, // Add aria-hidden
   },
   {
     title: "Visa-Compliance Guaranteed",
     description:
       "Our dummy tickets are designed to meet and exceed all embassy and consulate requirements worldwide",
     gradient: "from-emerald-50 to-green-100",
-    icon: <CheckCircle className="h-6 w-6 text-emerald-600" />,
+    icon: <CheckCircle className="h-6 w-6 text-emerald-600" aria-hidden="true" />, // Add aria-hidden
   },
 ];
 
@@ -109,9 +109,10 @@ export default function Featured() {
   };
 
   return (
-    <section
+    <section // Use section tag
       className="py-24 bg-white relative overflow-hidden"
       ref={featuredRef}
+      aria-labelledby="featured-benefits-heading" // Add aria-label
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none">
@@ -147,7 +148,8 @@ export default function Featured() {
             </span>
           </motion.div>
 
-          <motion.h2
+          <motion.h2 // Use h2 for section heading
+            id="featured-benefits-heading" // ID for aria-labelledby
             className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900"
             initial={{ opacity: 0, y: -20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -162,7 +164,7 @@ export default function Featured() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Seamless Processing for Worry-Free Travel
+            Seamless Processing for Worry-Free Travel & Visa Applications
           </motion.p>
         </div>
 
@@ -191,7 +193,8 @@ export default function Featured() {
                   <Badge className="w-fit mb-3 bg-white/80 text-gray-700 hover:bg-white">
                     {benefit.highlight}
                   </Badge>
-                  <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-800">
+                  {/* Use h3 for card titles */}
+                  <CardTitle as="h3" className="flex items-center gap-3 text-xl font-bold text-gray-800">
                     <motion.div
                       className="p-2 bg-white rounded-lg shadow-sm"
                       whileHover={{ rotate: 10 }}
@@ -210,16 +213,18 @@ export default function Featured() {
                   <div className="text-sm text-gray-600 font-medium">
                     {benefit.stat}
                   </div>
+                  {/* Consider if this button needs a more descriptive aria-label */}
                   <Button
                     variant="ghost"
                     size="sm"
                     className="rounded-full text-gray-700 hover:text-blue-600 hover:bg-white/60 p-0 h-8 w-8"
+                    aria-label={`More about ${benefit.title}`} // Example aria-label
                   >
                     <motion.div
                       whileHover={{ rotate: 180 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <StarIcon className="h-4 w-4" />
+                      <StarIcon className="h-4 w-4" aria-hidden="true" />
                     </motion.div>
                   </Button>
                 </CardFooter>
@@ -253,6 +258,7 @@ export default function Featured() {
                     {feature.icon}
                   </div>
                   <div>
+                    {/* Use h3 for feature titles */}
                     <h3 className="font-semibold text-gray-800 mb-1">
                       {feature.title}
                     </h3>
@@ -282,9 +288,8 @@ export default function Featured() {
               Secure Your Verified Ticket Now — Only $8 | Limited Time Offer
             </Link>
           </Button>
-          a
           <p className="mt-4 text-sm text-gray-500 flex items-center justify-center">
-            <Shield className="h-4 w-4 mr-1 text-green-500" />
+            <Shield className="h-4 w-4 mr-1 text-green-500" aria-hidden="true" />
             <span>Secure, Verified, and Instant Processing</span>
           </p>
         </motion.div>

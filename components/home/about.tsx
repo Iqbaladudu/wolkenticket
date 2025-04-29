@@ -72,7 +72,10 @@ export default function AboutUs() {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50 text-gray-900 relative overflow-hidden">
+    <section // Use section tag
+      className="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50 text-gray-900 relative overflow-hidden"
+      aria-labelledby="about-us-heading" // Add aria-label
+    >
       {/* Decorative elements */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(5)].map((_, i) => (
@@ -119,7 +122,8 @@ export default function AboutUs() {
             </span>
           </motion.div>
 
-          <motion.h2
+          <motion.h2 // Use h2 for section heading
+            id="about-us-heading" // ID for aria-labelledby
             className="text-3xl md:text-4xl font-bold mb-4 leading-tight"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -136,10 +140,9 @@ export default function AboutUs() {
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           >
             WolkenTicket simplifies your travel preparations with instant,
-            secure dummy ticket reservations trusted by over 50,000 global
+            secure dummy ticket reservations trusted by thousands of global
             travelers. Our embassy-recognized flight documentation streamlines
-            visa applications and travel planning, giving you peace of mind when
-            it matters most
+            visa applications and travel planning, giving you peace of mind.
           </motion.p>
         </div>
 
@@ -150,12 +153,14 @@ export default function AboutUs() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
           className="mb-12"
+          aria-labelledby="airline-partners-heading" // Add aria-label
         >
           <div className="text-center mb-8">
             <Badge variant="outline" className="mb-2 bg-white">
               Airline Partners
             </Badge>
-            <h3 className="text-2xl font-semibold">
+            {/* Use h3 for subsection heading */}
+            <h3 id="airline-partners-heading" className="text-2xl font-semibold">
               Partnered with leading airlines
             </h3>
           </div>
@@ -175,7 +180,8 @@ export default function AboutUs() {
                 <div className="relative h-16 w-40 mb-2 grayscale hover:grayscale-0 transition-all duration-300">
                   <Image
                     src={partner.logo}
-                    alt={`${partner.name} logo`}
+                    // Add descriptive alt text
+                    alt={`${partner.name} logo - Wolkenticket partner`}
                     fill
                     className="object-contain"
                     sizes="(max-width: 768px) 100vw, 160px"
@@ -195,11 +201,12 @@ export default function AboutUs() {
           transition={{ duration: 0.7, delay: 0.3 }}
           className="text-center max-w-3xl mx-auto"
         >
+           {/* Use h3 for subsection heading */}
           <h3 className="text-2xl font-semibold mb-4">
             Trusted by Global Nomads in 180+ Countries — Ready to Help You 24/7
           </h3>
           <p className="text-gray-600 mb-6">
-            Join over 100++ successful visa applicants who relied on
+            Join thousands of successful visa applicants who relied on
             WolkenTicket for embassy-accepted flight documentation. Our
             lightning-fast service works 24/7 with live support guiding you
             every step of the way.

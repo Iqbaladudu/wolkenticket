@@ -14,10 +14,55 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"; // Fallback for local dev
+
 export const metadata: Metadata = {
-  title: "Wolkenticket | Get Your Ticket In Minutes",
-  description: "Get Your Ticket In Minutes",
+  metadataBase: new URL(siteUrl), // Add metadataBase
+  title: {
+    default: "Wolkenticket | Get Your Verified Flight Reservation In Minutes",
+    template: "%s | Wolkenticket",
+  },
+  description:
+    "Get verified flight reservations for visa applications in minutes. Fast, easy, reliable, and affordable dummy tickets starting at just $8.",
   icons: favicon,
+  // openGraph: {
+  //   title: "Wolkenticket | Verified Flight Reservations Fast",
+  //   description:
+  //     "Need a flight reservation for your visa? Get it instantly with Wolkenticket for just $8. Secure, reliable, and embassy-accepted.",
+  //   url: siteUrl,
+  //   siteName: "Wolkenticket",
+  //   images: [
+  //     {
+  //       url: "/og-image.png", // Replace with your actual OG image path
+  //       width: 1200,
+  //       height: 630,
+  //       alt: "Wolkenticket - Fast Flight Reservations",
+  //     },
+  //   ],
+  //   locale: "en_US",
+  //   type: "website",
+  // },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "Wolkenticket | Verified Flight Reservations Fast",
+  //   description:
+  //     "Instant flight reservations for visa needs from $8. Wolkenticket: Fast, Secure, Reliable.",
+  //   // site: '@yourTwitterHandle', // Add your Twitter handle if you have one
+  //   // creator: '@creatorTwitterHandle', // Add creator handle if applicable
+  //   images: [`${siteUrl}/twitter-image.png`], // Replace with your actual Twitter image path
+  // },
+  robots: { // Add robots meta tag
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  keywords: ['flight reservation', 'dummy ticket', 'visa application', 'travel document', 'flight itinerary'],
 };
 
 export default function RootLayout({

@@ -42,7 +42,7 @@ const fadeIn = {
   },
 };
 
-// Search form component with simplified animations
+// Search form component
 const FullScreenLookupForm: React.FC<{
   onSearch: (code: string) => void;
   isSearching: boolean;
@@ -61,98 +61,70 @@ const FullScreenLookupForm: React.FC<{
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-4 py-12"
+      className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-4 py-12 text-center" // Added text-center
     >
       {/* Subtle background decoration */}
       <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-blue-50 to-transparent opacity-70"></div>
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-blue-50 to-transparent opacity-70"></div>
 
-      <div className="w-full max-w-md mx-auto text-center mb-8 relative">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="inline-flex items-center justify-center mb-5">
-            <div className="bg-blue-100 p-3 rounded-full">
-              <TicketIcon className="h-7 w-7 text-blue-600" />
+      {/* Content */}
+      <motion.div
+        variants={fadeIn}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 max-w-lg w-full"
+      >
+        <Card className="bg-white/80 backdrop-blur-md shadow-xl border-none">
+          <CardHeader>
+            <div className="mx-auto bg-blue-100 p-3 rounded-full w-fit mb-4">
+              <TicketIcon className="h-8 w-8 text-blue-600" />
             </div>
-          </div>
-
-          <h1 className="text-3xl font-bold text-gray-900 mb-3">
-            Find Your Booking
-          </h1>
-
-          <p className="text-gray-600 mb-8">
-            Enter your booking reference or transaction ID
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-white rounded-lg shadow-md border border-gray-100 p-6"
-        >
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="bookingCode"
-                className="block text-sm font-medium text-gray-700 mb-2 text-left"
-              >
-                Booking ID or Transaction ID
-              </label>
+            {/* Add H1 for the main title */}
+            <CardTitle as="h1" className="text-3xl font-bold text-gray-900">
+              View Your Booking
+            </CardTitle>
+            <CardDescription className="text-gray-600 pt-1">
+              Enter your booking code below to retrieve your flight reservation details.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative">
                 <Input
-                  id="bookingCode"
-                  placeholder="e.g., 123abc456def or TX1234567"
+                  type="text"
+                  placeholder="Enter Booking Code (e.g., WK123XYZ)"
                   value={bookingCode}
-                  onChange={(e) => setBookingCode(e.target.value)}
-                  className="pl-10 h-12 text-base border-gray-200 focus-visible:ring-blue-500 focus-visible:border-blue-500"
+                  onChange={(e) => setBookingCode(e.target.value.toUpperCase())} // Suggest uppercase
+                  className="pl-10 pr-4 py-3 text-base border-gray-200 focus:border-blue-500 focus:ring-blue-200"
+                  aria-label="Booking Code Input"
+                  required
+                  minLength={6} // Example minimum length
                 />
-                <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" aria-hidden="true" />
               </div>
-              <p className="text-xs text-gray-500 mt-1 text-left">
-                Found in your confirmation email
-              </p>
-            </div>
-
-            <Button
-              type="submit"
-              disabled={!bookingCode.trim() || isSearching}
-              className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium text-base rounded-md transition-colors duration-300"
-            >
-              {isSearching ? (
-                <motion.div className="flex items-center">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 1,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                    className="mr-2"
-                  >
-                    <Clock className="h-5 w-5" />
-                  </motion.div>
-                  Searching...
-                </motion.div>
-              ) : (
-                "Find My Booking"
-              )}
-            </Button>
-          </form>
-        </motion.div>
-      </div>
+              <Button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-base font-semibold shadow-md hover:shadow-lg transition-all duration-300"
+                disabled={isSearching || !bookingCode.trim()}
+              >
+                {isSearching ? "Searching..." : "Find Booking"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+        <p className="text-xs text-gray-500 mt-4">
+          Can't find your code? Check your confirmation email or{" "}
+          <a href="/contact" className="text-blue-600 hover:underline">contact support</a>.
+        </p>
+      </motion.div>
     </motion.div>
   );
 };
 
-// Simplified Booking Detail View with elegant animations
-const BookingDetailView: React.FC<{
-  booking: Booking;
-  onBackToSearch: () => void;
-}> = ({ booking, onBackToSearch }) => {
+// --- Placeholder for BookingDetails component ---
+// This component would display the actual booking info once found.
+// It should use semantic HTML (sections, headings, lists) for structure.
+const BookingDetails: React.FC<{ booking: Booking; onBack: () => void }> = ({ booking, onBack }) => {
   // Format dates for display
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -222,7 +194,7 @@ const BookingDetailView: React.FC<{
       >
         <Button
           variant="ghost"
-          onClick={onBackToSearch}
+          onClick={onBack}
           className="mb-6 text-gray-700 -ml-2 group"
         >
           <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform duration-200" />
@@ -502,133 +474,82 @@ const BookingDetailView: React.FC<{
   );
 };
 
-// Simplified no results view
-const NoResultsView: React.FC<{
-  searchCode: string;
-  onBackToSearch: () => void;
-}> = ({ searchCode, onBackToSearch }) => {
-  return (
+// --- Placeholder for ErrorDisplay component ---
+const ErrorDisplay: React.FC<{ message: string; onBack: () => void }> = ({ message, onBack }) => {
+ return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-4 py-12"
+      variants={fadeIn}
+      initial="hidden"
+      animate="visible"
+      className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-4 py-12 text-center"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="max-w-md w-full mx-auto text-center"
-      >
-        <Card className="shadow-md border-gray-100">
-          <CardContent className="p-6 pt-8">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="bg-red-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-5"
-            >
-              <AlertCircle className="h-8 w-8 text-red-600" />
-            </motion.div>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
-              No Booking Found
-            </h3>
-
-            <p className="text-gray-600 mb-5">
-              We couldn&apos;t find any bookings matching &quot;
-              <span className="font-medium text-gray-800">{searchCode}</span>
-              &quot;
-            </p>
-
-            <div className="text-left bg-gray-50 p-4 rounded-lg border border-gray-200 mb-5">
-              <p className="text-sm text-gray-600 mb-2">Please check that:</p>
-              <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                <li>You&apos;ve entered the correct ID</li>
-                <li>Check your email for the reference number</li>
-                <li>New bookings may take a moment to appear</li>
-              </ul>
-            </div>
-
-            <Button
-              onClick={onBackToSearch}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              Try Another Search
-            </Button>
-          </CardContent>
-        </Card>
-      </motion.div>
+       <Card className="bg-red-50 border-red-200 max-w-md w-full">
+         <CardHeader>
+           <div className="mx-auto bg-red-100 p-3 rounded-full w-fit mb-4">
+             <XCircle className="h-8 w-8 text-red-600" />
+           </div>
+           <CardTitle className="text-red-700">Booking Not Found</CardTitle>
+         </CardHeader>
+         <CardContent>
+           <p className="text-red-600 mb-4">{message}</p>
+           <Button variant="outline" onClick={onBack}>
+             <ArrowLeft className="mr-2 h-4 w-4" /> Try Again
+           </Button>
+         </CardContent>
+       </Card>
     </motion.div>
-  );
+ );
 };
 
-// Main container component
-const ViewBookingContainer: React.FC = () => {
-  const [searchCode, setSearchCode] = useState<string>("");
-  const [isSearching, setIsSearching] = useState<boolean>(false);
-  const [booking, setBooking] = useState<Booking | null>(null);
-  const [viewState, setViewState] = useState<
-    "search" | "result" | "no-results"
-  >("search");
 
-  // Handle search submission
+// Main container component
+export default function ViewBookingContainer() {
+  const [booking, setBooking] = useState<Booking | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+
   const handleSearch = async (code: string) => {
     setIsSearching(true);
-    setSearchCode(code);
+    setError(null);
+    setBooking(null);
+    setShowDetails(false);
 
     try {
       const result = await findBookingAction(code);
-      if (result.totalDocs < 1) {
-        setViewState("no-results");
+      if (result.success && result.data) {
+        setBooking(result.data);
+        setShowDetails(true);
       } else {
-        setBooking(result.docs[0]);
-        setViewState("result");
+        setError(result.error || "Booking not found or an error occurred.");
       }
-    } catch (error) {
-      setViewState("no-results");
+    } catch (err) {
+      setError("An unexpected error occurred while searching for the booking.");
+      console.error(err);
     } finally {
       setIsSearching(false);
     }
   };
 
-  // Back to search
-  const handleBackToSearch = () => {
-    setViewState("search");
+  const handleBack = () => {
+    setShowDetails(false);
+    setError(null);
     setBooking(null);
-    setSearchCode("");
   };
 
   return (
-    <div className="bg-white min-h-screen">
-      <AnimatePresence mode="wait">
-        {viewState === "search" && (
-          <FullScreenLookupForm
-            key="search-form"
-            onSearch={handleSearch}
-            isSearching={isSearching}
-          />
-        )}
-
-        {viewState === "result" && booking && (
-          <BookingDetailView
-            key="booking-detail"
-            booking={booking}
-            onBackToSearch={handleBackToSearch}
-          />
-        )}
-
-        {viewState === "no-results" && (
-          <NoResultsView
-            key="no-results"
-            searchCode={searchCode}
-            onBackToSearch={handleBackToSearch}
-          />
-        )}
-      </AnimatePresence>
-    </div>
+    <AnimatePresence mode="wait">
+      {showDetails && booking ? (
+        <BookingDetails key="details" booking={booking} onBack={handleBack} />
+      ) : error ? (
+         <ErrorDisplay key="error" message={error} onBack={handleBack} />
+      ) : (
+        <FullScreenLookupForm
+          key="search"
+          onSearch={handleSearch}
+          isSearching={isSearching}
+        />
+      )}
+    </AnimatePresence>
   );
-};
-
-export default ViewBookingContainer;
+}
